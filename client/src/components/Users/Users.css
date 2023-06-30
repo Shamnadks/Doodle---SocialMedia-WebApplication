@@ -1,0 +1,11 @@
+.table{
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 18px;
+    text-align: center;
+    padding: 15px;
+    background-color:transparent;
+    backdropFilter: "blur(200px)";
+    color: rgb(245, 233, 233);
+    border-radius: 1.2rem;
+}
