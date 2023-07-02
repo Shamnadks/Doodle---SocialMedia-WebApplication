@@ -1,7 +1,7 @@
 import { Box, Typography, useMediaQuery, TextField, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import backgroundImage from "./background1.jpg";
-import toast,{ Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -54,7 +54,6 @@ const OtpPage = () => {
         body: JSON.stringify({otp,email}),
     });
     onSubmitProps.resetForm();
-    const data = await response.json();
     if (response.status === 400) {
         toast.error("Entered OTP is wrong");
     }

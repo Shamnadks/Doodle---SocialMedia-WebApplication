@@ -15,20 +15,20 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
-import toast,{Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("Enter your first name"),
   lastName: yup.string().required("Enter your last name"),
   email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required")  .min(8, 'Password must be at least 8 characters long')
+  password: yup.string().required("required").min(8, 'Password must be at least 8 characters long')
   .matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
     'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character'),
   confirmPassword: yup.string().required("required").oneOf([yup.ref('password'), null], 'Passwords must match'),
   location: yup.string().required("enter your location"),
   occupation: yup.string().required("enter your occupation"),
-  picture: yup.mixed().required("upload a picture"),
+  picture: yup.string().required("upload your picture"),
 });
 
 const loginSchema = yup.object().shape({
@@ -44,7 +44,7 @@ const initialValuesRegister = {
   confirmPassword:"",
   location: "",
   occupation: "",
-  picture:null,
+  picture: "",
 };
 
 const initialValuesLogin = {
@@ -54,6 +54,7 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [imageError, setImageError] = useState("");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -118,10 +119,12 @@ const Form = () => {
     }
   };
 
+
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
   };
+
 
   return (
     <Formik
@@ -209,10 +212,22 @@ const Form = () => {
                   <Dropzone
                     acceptedFiles=".jpg,.jpeg,.png"
                     multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
+                    onDrop={(acceptedFiles) => {
+                    const file = acceptedFiles[0];
+                    if (file) {
+                    const isFileTypeValid = file.type === "image/jpeg" || file.type === "image/png";
+
+                    if (!isFileTypeValid) {
+                    setImageError("Please select a JPEG or PNG file.");
+                    setFieldValue("picture", "");
+                     } else {
+                    setFieldValue("picture", file);
+                    setImageError(""); 
+                      }
+                      }
+                      }}
                   >
+                  
                     {({ getRootProps, getInputProps }) => (
                       <Box
                         {...getRootProps()}
@@ -220,7 +235,7 @@ const Form = () => {
                         p="1rem"
                         sx={{ "&:hover": { cursor: "pointer" } }}
                       >
-                        <input {...getInputProps()} />
+                        <input acc {...getInputProps()} />
                         {!values.picture ? (
                           <p>Drag 'n' drop your picture here, or click to select</p>
                         ) : (
@@ -232,6 +247,11 @@ const Form = () => {
                       </Box>
                     )}
                   </Dropzone>
+                  {imageError && (
+  <Typography variant="body2" color="error">
+    {imageError}
+  </Typography>
+)}
                 </Box>
               </>
             )}

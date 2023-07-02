@@ -4,7 +4,7 @@ import AdminDashboard from 'scenes/adminDashboard';
 import LoginPage from 'scenes/loginPage';
 import OtpPage from 'scenes/loginPage/OtpPage';
 import AdminLoginPage from 'scenes/adminLoginPage';
-import ProfilePage from 'scenes/profilePage';
+import ProfilePage from "scenes/profilePage";
 import {useSelector} from 'react-redux';
 import {useMemo} from 'react';
 import { CssBaseline,ThemeProvider } from '@mui/material';
@@ -34,7 +34,7 @@ function App() {
          <Route path="/home" element={isAuth ? <HomePage/> : <Navigate to="/" />} />
          <Route path="/admin" element={isAdminAuth?<Navigate to="/adminHome" />:<AdminLoginPage/>} /> 
          <Route path="/AdminHome" element={isAdminAuth?<AdminDashboard/> : <Navigate to="/admin" />} /> 
-         <Route path="/profle/:userId" element={isAuth ?<ProfilePage/> : <Navigate to="/" />} />
+         <Route path="/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/" />}/>
         </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -8,6 +8,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
 
+
   const getPosts = async () => {
     const response = await fetch("http://localhost:3001/posts", {
       method: "GET",
@@ -17,6 +18,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     dispatch(setPosts({ posts: data }));
   };
 
+
   const getUserPosts = async () => {
     const response = await fetch(
       `http://localhost:3001/posts/${userId}/posts`,
@@ -25,8 +27,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    const data = await response.json();
+    const data = await response.json()
     dispatch(setPosts({ posts: data }));
+  
   };
 
   useEffect(() => {
@@ -37,7 +40,11 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
+  return (posts.length === 0 ? 
+    <div>
+      <img style={{marginLeft:"110px"}} src='https://media.tenor.com/tErPDtf_1SsAAAAi/mafumafu-ghost.gif' alt="no posts"/>
+      <h3 style={{textAlign:"center", fontSize:"20px" ,marginTop:"10px",fontWeight:"600",color:"red",fontFamily:"initial"}}>No Post found!</h3>
+    </div> :
     <>
       {posts.map(
         ({
