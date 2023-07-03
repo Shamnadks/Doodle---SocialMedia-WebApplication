@@ -36,6 +36,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     dispatch(setFriends({ friends: data }));
   };
 
+ 
+
+
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
@@ -64,6 +67,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           </Typography>
         </Box>
       </FlexBetween>
+
+      {_id !== friendId ? (
       <IconButton
         onClick={() => patchFriend()}
         sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
@@ -73,7 +78,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         ) : (
           <PersonAddOutlined sx={{ color: primaryDark }} />
         )}
-      </IconButton>
+      </IconButton>) :null}
     </FlexBetween>
   );
 };

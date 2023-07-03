@@ -38,12 +38,12 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [posts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (posts.length === 0 ? 
     <div>
       <img style={{marginLeft:"110px"}} src='https://media.tenor.com/tErPDtf_1SsAAAAi/mafumafu-ghost.gif' alt="no posts"/>
-      <h3 style={{textAlign:"center", fontSize:"20px" ,marginTop:"10px",fontWeight:"600",color:"red",fontFamily:"initial"}}>No Post found!</h3>
+      <h3 style={{textAlign:"center", fontSize:"20px" ,marginTop:"10px",fontWeight:"600",color:"primary",fontFamily:"initial"}}>No Post found!</h3>
     </div> :
     <>
       {posts.map(
@@ -58,6 +58,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           userPicturePath,
           likes,
           comments,
+          createdAt,
         }) => (
           <PostWidget
             key={_id}
@@ -70,6 +71,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
+            createdAt={createdAt}
           />
         )
       )}

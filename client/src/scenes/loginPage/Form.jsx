@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import jwt_decode from "jwt-decode";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -55,12 +56,119 @@ const initialValuesLogin = {
 const Form = () => {
   const [pageType, setPageType] = useState("login");
   const [imageError, setImageError] = useState("");
+  const [user, setUser] = useState({});
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+
+
+
+
+  function handleCallbackResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    var userObject = jwt_decode(response.credential);
+    console.log("hdfuiuytff", userObject);
+
+    setUser(userObject);
+  }
+
+  useEffect(() => {
+    const initializeGoogleSignIn = () => {
+      if (
+        window.google &&
+        window.google.accounts &&
+        window.google.accounts.id
+      ) {
+        window.google.accounts.id.initialize({
+          client_id:
+            "585711333789-j332iagr0aio3ebf0rkv0ct6jshjugem.apps.googleusercontent.com",
+          callback: handleCallbackResponse,
+        });
+
+        window.google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          {
+            theme: "outline",
+            size: "large",
+            text: "Sign in with Google",
+            login_uri: false,
+            request_visible_actions: "http://schema.org/AddAction",
+            prompt_parent_id: "signInDiv",
+            callback: handleCallbackResponse,
+          }
+        );
+      } else {
+        setTimeout(initializeGoogleSignIn, 100);
+      }
+    };
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.onload = initializeGoogleSignIn;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+
+
+  const googlebutton = async (e) => {
+    const googledata = {
+      email: user.email,
+      firstName: user.given_name,
+      lastName: user.family_name,
+      picturePath: user.picture,
+      location: "India",
+      occupation: "Not Specified",
+    };
+    const response = await fetch("http://localhost:3001/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(googledata),
+      })
+
+      const data = await response.json();
+    if (response.status === 200) {
+      dispatch(
+        setLogin({
+          user: data.user,
+          token: data.token,
+        })
+      );
+      navigate("/home");
+    } else {
+    }
+  };
+
+  if (user) {
+    googlebutton();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
@@ -299,7 +407,7 @@ const Form = () => {
               fullWidth
               type="submit"
               sx={{
-                m: "2rem 0",
+                m: "1rem 0",
                 p: "1rem",
                 backgroundColor: palette.primary.main,
                 color: palette.background.alt,
@@ -309,6 +417,9 @@ const Form = () => {
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
     
+          
+            <div id="signInDiv" style={{ marginLeft: "1px" }}></div>
+              
             
             <Typography
               onClick={() => {

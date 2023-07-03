@@ -160,10 +160,44 @@ export const login = async (req,res) =>{
     }
 }
 
+export const googleSignIn = async (req, res) => {
+    try {
+      const { firstName, lastName, email, picturePath ,location,occupation} = req.body;
+      if(!email || !firstName || !lastName || !picturePath) return res.status(400).json({ error: "Please fill all the required fields" });
+
+      
+        const user = await User.findOne({email:email});
+        if(user){
+          const token = jwt.sign({id:user._id},process.env.JWT_SECRET);
+          delete user.password;
+          return res.status(200).json({token,user})
+        }
+
+        const newUser = new User({
+          firstName,
+          lastName,
+          email,
+          picturePath,
+          location,
+          occupation,
+          viewedProfile: Math.floor(Math.random() * 1000),
+          impressions: Math.floor(Math.random() * 1000)
+        });
+        await newUser.save();
+        const token = jwt.sign({id:newUser._id},process.env.JWT_SECRET);
+        delete newUser.password;
+        res.status(200).json({token,user:newUser})
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    };
+    
 
 
 
 
 
 
-export default { register,login, verifyOTP };
+
+
+export default { register,login, verifyOTP ,googleSignIn};

@@ -51,7 +51,7 @@ export const getUserPosts =async(req,res)=>{
 }
 
 
-// update
+
 
 export const likePost = async(req,res)=>{
     try{
@@ -72,6 +72,16 @@ export const likePost = async(req,res)=>{
     }
 }
 
+const deletePost=async(req,res)=>{
+    try{
+        const { id }= req.params;
+        const post = await Post.findByIdAndDelete(id);
+        res.status(200).json(post);
+    }catch(err){
+        res.status(404).json({message:err.message})
+    }
+}
 
 
-export default { createPost,getFeedPosts,getUserPosts,likePost };
+
+export default { createPost,getFeedPosts,getUserPosts,likePost,deletePost };

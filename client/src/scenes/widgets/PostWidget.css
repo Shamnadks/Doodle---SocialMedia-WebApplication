@@ -1,0 +1,32 @@
+.swal-dark {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .swal-dark .swal-title {
+    color: #fff;
+  }
+  
+  .swal-dark .swal-text {
+    color: #ccc;
+  }
+  
+  .swal-dark .swal-button {
+    background-color: #00cccc;
+  }
+  
+  .swal-dark .swal-button:not([disabled]):hover {
+    background-color: #008b8b;
+  }
+  
+  .swal-dark .swal-footer {
+    border-top-color: #666;
+  }
+  
+  .swal-dark .swal-icon {
+    border-color: #ccc;
+  }
+  
+  .swal-dark .swal-icon svg {
+    fill: #ccc;
+  }

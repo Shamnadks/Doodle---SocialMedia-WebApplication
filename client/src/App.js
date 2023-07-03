@@ -11,6 +11,7 @@ import { CssBaseline,ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme'; 
 import { Toaster } from 'react-hot-toast';
+import Error from "scenes/404/index"
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -35,6 +36,7 @@ function App() {
          <Route path="/admin" element={isAdminAuth?<Navigate to="/adminHome" />:<AdminLoginPage/>} /> 
          <Route path="/AdminHome" element={isAdminAuth?<AdminDashboard/> : <Navigate to="/admin" />} /> 
          <Route path="/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/" />}/>
+         <Route path="*" element={ <Error />}/>
         </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -24,7 +24,11 @@ const postSchema = new mongoose.Schema({
     comments:{
         type:Array,
         default:[]
-    }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 },{timestamps: true});
 
 const Post = mongoose.model("Post",postSchema);
