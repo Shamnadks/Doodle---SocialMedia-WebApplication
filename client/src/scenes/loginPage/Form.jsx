@@ -17,6 +17,9 @@ import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import toast from 'react-hot-toast';
+import axios from '../../utils/axios';
+import { registerUser , loginUser } from "../../utils/constants";
+
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("Enter your first name"),
@@ -170,60 +173,58 @@ const Form = () => {
 
 
 
-  const register = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
+  const register =async (values, onSubmitProps) => {
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
     }
     formData.append("picturePath", values.picture.name);
-
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
-      {
-        method: "POST",
-        body: formData,
+  
+    try {
+      const response = await axios.post(registerUser, formData);
+  
+      if (response.status === 200) {
+        toast.success("OTP has been sent to your email.");
+        navigate("/otp", { state: { email: response.data.email } });
+      } else if (response.status === 400) {
+        toast.error("User already exists, try logging in");
+      } else {
+        toast.error("Something went wrong");
       }
-    );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
-
-    if (savedUserResponse.status === 200) {
-      toast.success("OTP has been sent to your email.");
-      navigate("/otp", { state: { email: savedUser.email } })
-    }else if(savedUserResponse.status === 400){
-      toast.error("User already exists, try logging in");
-    }else{
-      toast.error("Something went wrong");
-      
+      onSubmitProps.resetForm();
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred");
     }
   };
 
-  
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-
-    if (loggedInResponse.status=== 200) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
-    }else if(loggedInResponse.status === 404){
-      toast.error("User not found , try registering your account");
-    }else if(loggedInResponse.status === 400){
-      toast.error(loggedIn.msg);
-    }else{
-      toast.error("Something went wrong");
+    try {
+        const response = await axios.post(loginUser, values, {
+        headers: { "Content-Type": "application/json" },
+      });
+      const loggedIn = response.data;
+      onSubmitProps.resetForm();
+  
+      if (response.status === 200) {
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/home");
+      } else if (response.status === 404) {
+        toast.error("User not found, try registering your account");
+      } else if (response.status === 400) {
+        toast.error(loggedIn.msg);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred");
     }
   };
 

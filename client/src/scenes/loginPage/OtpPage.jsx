@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useLocation } from 'react-router-dom';
+import axios from '../../utils/axios';
+import { verifyOtp } from "../../utils/constants";
 
 
 
@@ -43,17 +45,13 @@ const OtpPage = () => {
   }, [timer]);
 
 
-
-  const verifyOTP = async(values, onSubmitProps) => {
-    const { otp } = values;
-    const response = await fetch("http://localhost:3001/auth/verifyOTP", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({otp,email}),
-    });
-    onSubmitProps.resetForm();
+  const verifyOTP = async (values, onSubmitProps) => {
+    const {otp} = values;
+    try {
+      const response = await axios.post(verifyOtp, { otp, email }, {
+        headers: { "Content-Type": "application/json" },
+      });
+      onSubmitProps.resetForm();
     if (response.status === 400) {
         toast.error("Entered OTP is wrong");
     }
@@ -64,6 +62,12 @@ const OtpPage = () => {
         toast.error("Entered OTP is wrong");
     }
     }
+    catch (error) {
+      console.log(error);
+    }
+  };
+
+
 
 
     const handleFormSubmit = async (values, onSubmitProps) => {
