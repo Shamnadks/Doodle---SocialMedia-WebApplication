@@ -16,7 +16,9 @@ import { setPost } from "state";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "react-hot-toast";
 import Swal from 'sweetalert2';
-import "./PostWidget.css"
+import "./PostWidget.css";
+import axios from "../../utils/axios";
+import CommentBox from "../../components/comments/Comments";
 
 
 const PostWidget = ({
@@ -44,56 +46,67 @@ const PostWidget = ({
 
 
  
-const deletePost = async (postId) => {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'You won\'t be able to revert this!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#00cccc',
-    cancelButtonColor: '#ff0000',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    customClass: {
-      container: 'swal-container',
-      popup: 'swal-popup swal-small swal-dark',
-      content: 'swal-content',
-      confirmButton: 'swal-confirm-button',
-      cancelButton: 'swal-cancel-button'
-    },
-    dark: true
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      const response = await fetch(`http://localhost:3001/posts/${postId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+
+  const deletePost = async (postId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00cccc',
+      cancelButtonColor: '#ff0000',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        container: 'swal-container',
+        popup: 'swal-popup swal-small swal-dark',
+        content: 'swal-content',
+        confirmButton: 'swal-confirm-button',
+        cancelButton: 'swal-cancel-button',
+      },
+      dark: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(`/posts/${postId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = response.data;
+          if (response.status === 200) {
+            toast.success('Post deleted successfully');
+            dispatch(setPost({ post: data }));
+          } else {
+            toast.error('Something went wrong');
+          }
+        } catch (error) {
+          console.error(error);
         }
-      });
-      const data = await response.json();
-      if (response.status === 200) {
-        toast.success("Post deleted successfully");
-        dispatch(setPost({ post: data }));
-      } else {
-        toast.error("Something went wrong");
       }
-    }
-  });
-};
+    });
+  };
 
 
-  const patchLike = async () => {
-    const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
-      method: "PATCH",
+
+const patchLike = async () => {
+  try {
+    const response = await axios.patch(`/posts/${postId}/like`, {
+      userId: loggedInUserId,
+    }, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: loggedInUserId }),
     });
-    const updatedPost = await response.json();
+    const updatedPost = response.data;
     dispatch(setPost({ post: updatedPost }));
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
 //   const commentTimeAgoList = comments.map((comment) =>
 //   formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })
@@ -164,9 +177,13 @@ const deletePost = async (postId) => {
     
         </FlexBetween> 
       </FlexBetween>
+
+          <CommentBox  />
+
+
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => (
+          {comments.map((comment,i) => (
             <Box key={`${name}-${i}`}>
               <Divider />
               <FlexBetween gap="0.5rem" mt="0.5rem">

@@ -1,7 +1,6 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
-// create
  
 export const createPost = async(req,res)=>{
     try{
@@ -27,29 +26,41 @@ export const createPost = async(req,res)=>{
 }
 
 
-// read
 
-export const getFeedPosts= async(req,res)=>{
-    try{
-        const post = await Post.find().sort({ createdAt: -1 });
-        res.status(200).json(post);
-    }catch(err){
-        res.status(404).json({message:err.message})
+export const getFeedPosts = async (req, res) => {
+    try {
+      const page = req.query.page || 1; 
+      const limit = 5;
+      const skip = (page - 1) * limit; 
+      const posts = await Post.find()
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+  
+      res.status(200).json(posts);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
     }
-}
-
-
-
-export const getUserPosts =async(req,res)=>{
-    try{
-        const {userId} = req.params;
-        const post = await Post.find({userId}).sort({ createdAt: -1 });;
-        res.status(200).json(post);
-    }catch(err){
-        res.status(404).json({message:err.message})
+  };
+  
+  export const getUserPosts = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const page = req.query.page || 1; 
+      const limit = 5; 
+  
+      const skip = (page - 1) * limit; 
+  
+      const posts = await Post.find({ userId })
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+  
+      res.status(200).json(posts);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
     }
-}
-
+  };
 
 
 

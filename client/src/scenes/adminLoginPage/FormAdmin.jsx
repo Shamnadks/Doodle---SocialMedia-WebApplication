@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAdminLogin } from "state";
 import toast,{Toaster} from 'react-hot-toast';
+import axios from "../../utils/axios";
+import { adminLogin } from "../../utils/constants";
 
 
 
@@ -38,28 +40,29 @@ const LoginAdmin = () => {
   
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    if (loggedInResponse.status===200) {
-      dispatch(
-        setAdminLogin({
-          admin: loggedIn.admin,
-          adminToken: loggedIn.token,
-        })
-      );
-      navigate("/adminHome");
-    }if (loggedInResponse.status===400) {
-      toast.error(loggedIn.msg);
-
-  }if (loggedInResponse.status===404) {
-      toast.error(loggedIn.msg);
-  }
-};
+    try {
+      const response = await axios.post(adminLogin, values, {
+        headers: { "Content-Type": "application/json" },
+      });
+      const loggedIn = response.data;
+      onSubmitProps.resetForm();
+      if (response.status === 200) {
+        dispatch(
+          setAdminLogin({
+            admin: loggedIn.admin,
+            adminToken: loggedIn.token,
+          })
+        );
+        navigate("/adminHome");
+      } else if (response.status === 400) {
+        toast.error(loggedIn.msg);
+      } else if (response.status === 404) {
+        toast.error(loggedIn.msg);
+      }
+    } catch (error) {
+      console.log("Error logging in:", error);
+    }
+  };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
      await login(values, onSubmitProps);

@@ -5,6 +5,12 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import toast, { Toaster } from 'react-hot-toast';
+import axios from '../../utils/axios';
+import {getUsers} from '../../utils/constants';
+
+
+
+
 function Users() {
   const [users, setUsers] = useState([]);
   const tableRef = useRef(null);
@@ -13,36 +19,35 @@ function Users() {
     getUsersList();
   }, []);
 
-  const deleteUser = async(id) => {
-    try {
-      const response = await fetch(`http://localhost:3001/admin/users/blockUnblock/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      const jsonData = await response.json();
-      console.log(jsonData);
-      getUsersList();
-      toast.success(`${jsonData.firstName} ${jsonData.lastName} is ${jsonData.isblock ? "blocked" : "unblocked"}`);
-    } catch (error) {
-      console.log("Error block/unblock user:", error);
-    }
-  };
+
+const deleteUser = async (id) => {
+  try {
+    const response = await axios.patch(`/admin/users/blockUnblock/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const jsonData = response.data;
+    console.log(jsonData);
+    getUsersList();
+    toast.success(`${jsonData.firstName} ${jsonData.lastName} is ${jsonData.isblock ? "blocked" : "unblocked"}`);
+  } catch (error) {
+    console.log('Error block/unblock user:', error);
+  }
+};
 
 
   const getUsersList = async () => {
     try {
-      const response = await fetch("http://localhost:3001/admin/users", {
-        method: "GET",
+      const response = await axios.get(getUsers, {
         headers: {
-          "Content-Type": "application/json"
-        }
+          'Content-Type': 'application/json',
+        },
       });
-      const jsonData = await response.json();
+      const jsonData = response.data;
       setUsers(jsonData);
     } catch (error) {
-      console.log("Error fetching users:", error);
+      console.log('Error fetching users:', error);
     }
   };
 

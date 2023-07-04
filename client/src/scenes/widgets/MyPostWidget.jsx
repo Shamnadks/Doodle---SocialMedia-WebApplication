@@ -25,6 +25,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import toast from "react-hot-toast";
+import axios from "../../utils/axios";
+import { uploadPost } from "../../utils/constants";
 
 const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -41,23 +43,25 @@ const MyPostWidget = ({ picturePath }) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
-    const formData = new FormData();
-    formData.append("userId", _id);
-    formData.append("description", post);
-    if (image) {
-      formData.append("picture", image);
-      formData.append("picturePath", image.name);
+    try {
+      const formData = new FormData();
+      formData.append("userId", _id);
+      formData.append("description", post);
+      if (image) {
+        formData.append("picture", image);
+        formData.append("picturePath", image.name);
+      }
+  
+      const response = await axios.post(uploadPost, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const posts = response.data;
+      dispatch(setPosts({ posts }));
+      setImage(null);
+      setPost("");
+    } catch (error) {
+      console.error(error);
     }
-
-    const response = await fetch(`http://localhost:3001/posts`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
-    setImage(null);
-    setPost("");
   };
 
    const handleDrop = (acceptedFiles) => {

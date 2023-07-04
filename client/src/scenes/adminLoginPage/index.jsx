@@ -2,7 +2,7 @@
 import { Box ,Typography,useTheme, useMediaQuery } from "@mui/material";
 import FormAdmin from "./FormAdmin";
 import backgroundImage from "./background.jpg";
-import {Toaster} from 'react-hot-toast';
+
 
 
 
@@ -16,7 +16,7 @@ const AdminLoginPage =()=>{
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }} height="100%">
-      <Toaster/>
+
     <Box width="100%"  p="1rem 6%" textAlign="center">
    <Typography fontWeight ="bold" fontSize ="38px" color="red"  sx={{
             border: "2px dashed white ",

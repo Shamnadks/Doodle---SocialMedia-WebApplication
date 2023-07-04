@@ -31,7 +31,6 @@ function App() {
         <Routes>
          <Route path="/" element={isAuth ?<Navigate to="/home" />:<LoginPage/>} /> 
          <Route path="/otp" element={ <OtpPage />} />
-
          <Route path="/home" element={isAuth ? <HomePage/> : <Navigate to="/" />} />
          <Route path="/admin" element={isAdminAuth?<Navigate to="/adminHome" />:<AdminLoginPage/>} /> 
          <Route path="/AdminHome" element={isAdminAuth?<AdminDashboard/> : <Navigate to="/admin" />} /> 
