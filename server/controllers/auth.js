@@ -52,7 +52,9 @@ const generateOTP = () => {
 
 export const register = async (req, res) => {
     try {
-      const { firstName, lastName, email, password, picturePath, friends, location, occupation } = req.body;
+      console.log("aaaaaaaaaaaaaaaa");
+      const { firstName, lastName, email, password,  friends, location, occupation } = req.body;
+      const picturePath = req.file.path;
   
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -94,7 +96,7 @@ export const register = async (req, res) => {
       transporter.sendMail(mailOptions, async (error, info) => {
         if (error) {
           console.log(error);
-          return res.status(500).json({ error: "Failed to send OTP" });
+          return res.status(500).json({ msg: "Failed to send OTP" });
         } else {
           // Save the OTP and user details in a temporary collection
           await OTPModel.create({

@@ -181,20 +181,20 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
   
     try {
-      const response = await axios.post(registerUser, formData);
+      const response = await toast.promise(
+        axios.post(registerUser, formData),
+        {
+          loading: "Registering... Please wait.",
+          success: "OTP has been sent to your email.",
+          error: "Failed to send OTP.",
+        }
+      );
   
-      if (response.status === 200) {
-        toast.success("OTP has been sent to your email.");
-        navigate("/otp", { state: { email: response.data.email } });
-      } else if (response.status === 400) {
-        toast.error("User already exists, try logging in");
-      } else {
-        toast.error("Something went wrong");
-      }
+      navigate("/otp", { state: { email: response.data.email } });
       onSubmitProps.resetForm();
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred");
+      toast.error(error.response.data.msg);
     }
   };
 
@@ -215,16 +215,12 @@ const Form = () => {
           })
         );
         navigate("/home");
-      } else if (response.status === 404) {
-        toast.error("User not found, try registering your account");
-      } else if (response.status === 400) {
-        toast.error(loggedIn.msg);
       } else {
-        toast.error("Something went wrong");
+        toast.error(loggedIn.msg);
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred");
+      toast.error(error.response.data.msg);
     }
   };
 
