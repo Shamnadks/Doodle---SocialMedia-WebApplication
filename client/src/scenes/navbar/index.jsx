@@ -38,13 +38,13 @@ const fullName = `${user.firstName} ${user.lastName}`;
 
 
     return (<FlexBetween padding="1rem 6%" 
-    backgroundColor={alt}
-    // width="100%"  sx={{
-    //     backgroundColor:"transparent",
-    //     backdropFilter: "blur(5px)",
-    //     position: "fixed",
-    //     zIndex: "1",
-    //   }}  p="0.2rem 6%" 
+    // backgroundColor={alt}
+    width="100%"  sx={{
+        backgroundColor:"transparent",
+        backdropFilter: "blur(20px)",
+        position: "fixed",
+        zIndex: "1",
+      }}  p="0.2rem 6%" 
      >
 <FlexBetween gap="1.75rem">
 <Typography 

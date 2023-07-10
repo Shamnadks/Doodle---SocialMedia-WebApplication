@@ -117,7 +117,7 @@ const Form = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
@@ -126,7 +126,6 @@ const Form = () => {
       email: user.email,
       firstName: user.given_name,
       lastName: user.family_name,
-      picturePath: user.picture,
       location: "India",
       occupation: "Not Specified",
     };
@@ -153,24 +152,6 @@ const Form = () => {
   if (user) {
     googlebutton();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -5,17 +5,24 @@ import { useSelector } from "react-redux";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import backgroundImage from "./home.jpg";
 
 const HomePage =()=>{
     const isNonMobileScreen =useMediaQuery('(min-width:1000px)');
     const { _id , picturePath } = useSelector(state => state.user);
 
     return ( 
-    <Box>
+    <Box  sx={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+      }}>
     <Navbar />
         <Box
         width ="100%"
-        padding ="2rem 6%"
+        padding ="5rem 6%"
         display={isNonMobileScreen?"flex":"block"}
         gap="0.5rem"
         justifyContent="space-between">
@@ -29,7 +36,7 @@ const HomePage =()=>{
             {isNonMobileScreen && (
                 <Box flexBasis="26%" sx={{}}>
                 <Box >
-                <FriendListWidget userId={_id} />
+                <FriendListWidget userId={_id}  isHome/>
                 </Box>
                 </Box>
             )}

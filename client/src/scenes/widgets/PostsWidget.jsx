@@ -9,7 +9,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
-  const token = useSelector((state) => state.token);
   const [page, setPage] = useState(1);
 
   const getPosts = async () => {

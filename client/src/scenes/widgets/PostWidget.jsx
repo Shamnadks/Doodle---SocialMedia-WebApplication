@@ -88,12 +88,6 @@ const PostWidget = ({
 
 
 
-
- 
- 
-
- 
-
   const deletePost = async (postId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -160,7 +154,10 @@ const patchLike = async () => {
 );
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="2rem 0"  sx={{
+      backgroundColor:"transparent",
+      backdropFilter: "blur(80px)",
+    }} >
     
       <Friend
         friendId={postUserId}
