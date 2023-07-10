@@ -34,7 +34,7 @@ function App() {
          <Route path="/home" element={isAuth ? <HomePage/> : <Navigate to="/" />} />
          <Route path="/admin" element={isAdminAuth?<Navigate to="/adminHome" />:<AdminLoginPage/>} /> 
          <Route path="/AdminHome" element={isAdminAuth?<AdminDashboard/> : <Navigate to="/admin" />} /> 
-         <Route path="/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/" />}/>
+         <Route path="/profile" element={isAuth ? <ProfilePage /> : <Navigate to="/" />}/>
          <Route path="*" element={ <Error />}/>
         </Routes>
         </ThemeProvider>

@@ -8,7 +8,6 @@ import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
@@ -17,18 +16,13 @@ const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
-  const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`/users/${userId}`);
       const data = response.data;
       setUser(data);
     } catch (error) {
@@ -43,6 +37,14 @@ const UserWidget = ({ userId, picturePath }) => {
   if (!user) {
     return null;
   }
+
+
+  const handleClick = () => { 
+    localStorage.removeItem("userId");
+    localStorage.setItem("userId", userId);
+    navigate(`/profile`);
+  };
+  
 
   const {
     firstName,
@@ -60,7 +62,7 @@ const UserWidget = ({ userId, picturePath }) => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => navigate(`/profile/${userId}`)}
+        onClick={handleClick}
       >
         <FlexBetween gap="1rem">
           <UserImage image={picturePath} />

@@ -6,14 +6,15 @@ import {
   Report,
 } from "@mui/icons-material";
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
-import { Box, Divider, IconButton, Typography, useTheme  } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme,List,ListItem  } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useState } from "react";
+import React,{ useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { formatDistanceToNow } from "date-fns";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from "react-hot-toast";
 import Swal from 'sweetalert2';
 import "./PostWidget.css";
@@ -32,6 +33,7 @@ const PostWidget = ({
   likes,
   comments,
   createdAt,
+  onCommentAdded,
 }) => {
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
@@ -44,6 +46,51 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
+
+  const handleDeleteComment = (commentId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Delete you commented!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00cccc',
+      cancelButtonColor: '#ff0000',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        container: 'swal-container',
+        popup: 'swal-popup swal-small swal-dark',
+        content: 'swal-content',
+        confirmButton: 'swal-confirm-button',
+        cancelButton: 'swal-cancel-button',
+      },
+      dark: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(`/posts/${postId}/comments/${commentId}`);
+          const data = response.data;
+          if (response.status === 200) {
+            toast.success('Comment deleted successfully');
+            dispatch(setPost({ post: data }));
+          } else {
+            toast.error('Something went wrong');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    );
+  };
+  
+
+
+
+
+ 
+ 
 
  
 
@@ -108,9 +155,9 @@ const patchLike = async () => {
 
 
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
-//   const commentTimeAgoList = comments.map((comment) =>
-//   formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })
-// );
+  const commentTimeAgoList = comments.map((comment) =>
+  formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })
+);
 
   return (
     <WidgetWrapper m="2rem 0">
@@ -178,27 +225,41 @@ const patchLike = async () => {
         </FlexBetween> 
       </FlexBetween>
 
-          <CommentBox  />
+          <CommentBox postId={postId} onCommentAdded={onCommentAdded}/>
 
-
-      {isComments && (
-        <Box mt="0.5rem">
-          {comments.map((comment,i) => (
-            <Box key={`${name}-${i}`}>
-              <Divider />
-              <FlexBetween gap="0.5rem" mt="0.5rem">
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
-              </Typography>
-              <Typography variant="caption" color={main} sx={{ pl: "1rem" }}>
-                {/* {commentTimeAgoList[i]}  */}
-                </Typography>
-              </FlexBetween>
-            </Box>
+          {isComments && (
+      <Box mt="0.5rem" maxHeight="200px" sx={{ overflow: 'auto', '&::-webkit-scrollbar': { display: 'none' } }}>
+        <List sx={{ width: '100%' }}>
+          {comments.map((comment, i) => (
+            <React.Fragment key={i}>
+              <ListItem disablePadding>
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                  <Box sx={{ borderRadius: '50%', overflow: 'hidden', marginRight: '0.5rem' }}>
+                    <img src={comment.userPicturePath} alt="User Profile" width="35px" height="35px" style={{ borderRadius: '50%' , marginTop:"10px" }} />
+                  </Box>
+                  <Box sx={{ flex: '1' }}>
+                    <Typography variant="subtitle2">{comment.firstName} {comment.lastName}</Typography>
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line', wordBreak: 'break-word' }}>{comment.text}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="caption" color="textSecondary" sx={{ marginRight: '0.5rem' }}>
+                      {commentTimeAgoList[i]}
+                    </Typography>
+                    {comment.userId === loggedInUserId && (
+                      <IconButton size="small" onClick={() => handleDeleteComment(comment._id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
+                  </Box>
+                </Box>
+              </ListItem>
+              {i !== comments.length - 1 && <Divider />}
+            </React.Fragment>
           ))}
-          <Divider />
-        </Box>
-      )}
+        </List>
+      </Box>
+    )}
+  
     </WidgetWrapper>
   );
 };

@@ -66,6 +66,39 @@ export const getFeedPosts = async (req, res) => {
     }
   };
 
+export const createComment = async (req, res) => {
+  try {
+    const { postId, _Id } = req.params;
+    console.log(postId,_Id);
+    const { comment } = req.body;
+
+    const user = await User.findById(_Id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const newComment = {
+      userId: _Id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userPicturePath: user.picturePath,
+      text: comment,
+    };
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    post.comments.push(newComment);
+    await post.save();
+
+    res.status(201).json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+
 
 
 export const likePost = async(req,res)=>{
@@ -97,6 +130,24 @@ const deletePost=async(req,res)=>{
     }
 }
 
+const deleteComment=async(req,res)=>{
+    try{
+        const { postId, _Id } = req.params;
+        const post = await Post.findById(postId);
+        const comment = post.comments.find((comment) => comment._id == _Id);
+        if (!comment) {
+          return res.status(404).json({ message: 'Comment not found' });
+        }
+        post.comments = post.comments.filter((comment) => comment._id != _Id);
+        await post.save();
+        res.status(200).json(post);
+    }catch(err){
+        res.status(404).json({message:err.message})
+    }
+}
 
 
-export default { createPost,getFeedPosts,getUserPosts,likePost,deletePost };
+
+
+
+export default { createPost,getFeedPosts,getUserPosts,likePost,deletePost ,createComment,deleteComment};

@@ -14,9 +14,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   const getPosts = async () => {
     try {
-      const response = await axios.get(getPost, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(getPost);
       const data = response.data;
       dispatch(setPosts({ posts: data }));
       setPage(1);
@@ -27,9 +25,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   const getUserPosts = async () => {
     try {
-      const response = await axios.get(`/posts/${userId}/posts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(`/posts/${userId}/posts`);
       const data = response.data;
       dispatch(setPosts({ posts: data }));
       setPage(1);
@@ -43,13 +39,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       const nextPage = page + 1;
       let response;
       if (isProfile) {
-        response = await axios.get(`/posts/${userId}/posts?page=${nextPage}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        response = await axios.get(`/posts/${userId}/posts?page=${nextPage}`);
       } else {
-        response = await axios.get(`/posts?page=${nextPage}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        response = await axios.get(`/posts?page=${nextPage}`);
       }
       const data = response.data;
       dispatch(setPosts({ posts: [...posts, ...data] }));
@@ -58,6 +50,15 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       console.error(error);
     }
   };
+
+  const handleCommentAdded = () => {
+    if (isProfile) {
+      getUserPosts();
+    } else {
+      getPosts();
+    }
+  };
+
 
   useEffect(() => {
     if (isProfile) {
@@ -72,8 +73,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       {posts.length === 0 ? (
         <div>
           <img
-            style={{ marginLeft: "110px" }}
-            src="https://media.tenor.com/tErPDtf_1SsAAAAi/mafumafu-ghost.gif"
+            style={{ marginLeft: "130px",height:"200px" }}
+            src="https://usagif.com/wp-content/uploads/2022/hqgif/ghost-50-pixel-ghost-transparent-background.gif"
             alt="no posts"
           />
           <h3
@@ -122,6 +123,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
                 likes={likes}
                 comments={comments}
                 createdAt={createdAt}
+                onCommentAdded={handleCommentAdded}
               />
             )
           )}

@@ -9,14 +9,11 @@ import axios from "../../utils/axios";
 const FriendListWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
-  const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends);
 
   const getFriends = async () => {
     try {
-      const response = await axios.get(`/users/${userId}/friends`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(`/users/${userId}/friends`);
       const data = response.data;
       dispatch(setFriends({ friends: data }));
     } catch (error) {

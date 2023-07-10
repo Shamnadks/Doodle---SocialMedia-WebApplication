@@ -138,6 +138,7 @@ const Form = () => {
 
       const data = await response.json();
     if (response.status === 200) {
+      localStorage.setItem("token", data.token);
       dispatch(
         setLogin({
           user: data.user,
@@ -201,13 +202,12 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     try {
-        const response = await axios.post(loginUser, values, {
-        headers: { "Content-Type": "application/json" },
-      });
+        const response = await axios.post(loginUser, values);
       const loggedIn = response.data;
       onSubmitProps.resetForm();
   
       if (response.status === 200) {
+        localStorage.setItem("token", loggedIn.token);
         dispatch(
           setLogin({
             user: loggedIn.user,

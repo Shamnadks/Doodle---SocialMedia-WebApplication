@@ -12,6 +12,8 @@ const router = express.Router();
 router.get("/",verifyToken,postController.getFeedPosts);
 router.get("/:userId/posts",verifyToken,postController.getUserPosts);
 
+router.post("/:postId/comments/:_Id",postController.createComment);
+router.delete("/:postId/comments/:_Id",postController.deleteComment);
 
 router.post("/",verifyToken,upload.single("picture"),postController.createPost);
 router.patch("/:id/like",verifyToken,postController.likePost);

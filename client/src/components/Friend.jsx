@@ -36,6 +36,12 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
     dispatch(setFriends({ friends: data }));
   };
 
+  const handleClick = () => {
+    localStorage.removeItem("userId");
+    localStorage.setItem("userId",friendId);
+    navigate(`/profile`);
+    navigate(0);
+  };
  
 
 
@@ -44,10 +50,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
       <FlexBetween gap="1rem">
         <UserImage image={userPicturePath} size="55px" />
         <Box
-          onClick={() => {
-            navigate(`/profile/${friendId}`);
-            navigate(0);
-          }}
+          onClick={handleClick}
         >
           <Typography
             color={main}

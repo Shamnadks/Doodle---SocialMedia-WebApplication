@@ -11,16 +11,13 @@ import axios from "../../utils/axios";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const { userId } = useParams();
+  const  userId  = localStorage.getItem("userId");
   const { picturePath } = useSelector(state => state.user);
-  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(`/users/${userId}`);
       const data = response.data;
       setUser(data);
     } catch (error) {
@@ -30,7 +27,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); 
 
   if (!user) return null;
 

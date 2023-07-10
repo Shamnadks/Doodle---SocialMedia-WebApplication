@@ -37,7 +37,6 @@ const MyPostWidget = ({ picturePath }) => {
   const [post, setPost] = useState("");
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
-  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
@@ -52,9 +51,7 @@ const MyPostWidget = ({ picturePath }) => {
         formData.append("picturePath", image.name);
       }
   
-      const response = await axios.post(uploadPost, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.post(uploadPost, formData);
       const posts = response.data;
       dispatch(setPosts({ posts }));
       setImage(null);
