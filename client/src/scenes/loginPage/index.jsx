@@ -1,7 +1,7 @@
 
 import { Box ,Typography,useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
-import backgroundImage from "./background1.jpg";
+import backgroundImage from "./prfbg.jpg";
 
 
 

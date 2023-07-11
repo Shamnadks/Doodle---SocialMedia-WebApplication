@@ -164,8 +164,8 @@ export const login = async (req,res) =>{
 
 export const googleSignIn = async (req, res) => {
     try {
-      const { firstName, lastName, email, picturePath ,location,occupation} = req.body;
-      if(!email || !firstName || !lastName || !picturePath) return res.status(400).json({ error: "Please fill all the required fields" });
+      const { firstName, lastName, email,location,occupation} = req.body;
+      if(!email || !firstName || !lastName) return res.status(400).json({ error: "Please fill all the required fields" });
 
       
         const user = await User.findOne({email:email});
@@ -179,7 +179,6 @@ export const googleSignIn = async (req, res) => {
           firstName,
           lastName,
           email,
-          picturePath,
           location,
           occupation,
           viewedProfile: Math.floor(Math.random() * 1000),

@@ -7,6 +7,7 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from '../../utils/axios';
 import {getUsers} from '../../utils/constants';
+import { blockUnblockUser , getUsersLists} from '../../services/adminServices';
 
 
 
@@ -22,13 +23,8 @@ function Users() {
 
 const deleteUser = async (id) => {
   try {
-    const response = await axios.patch(`/admin/users/blockUnblock/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await blockUnblockUser(id);
     const jsonData = response.data;
-    console.log(jsonData);
     getUsersList();
     toast.success(`${jsonData.firstName} ${jsonData.lastName} is ${jsonData.isblock ? "blocked" : "unblocked"}`);
   } catch (error) {
@@ -39,17 +35,15 @@ const deleteUser = async (id) => {
 
   const getUsersList = async () => {
     try {
-      const response = await axios.get(getUsers, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await getUsersLists();
       const jsonData = response.data;
       setUsers(jsonData);
     } catch (error) {
       console.log('Error fetching users:', error);
     }
   };
+
+  
 
   useEffect(() => {
     if (users.length > 0) {

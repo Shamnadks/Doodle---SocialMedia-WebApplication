@@ -4,18 +4,20 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFriends } from "state";
-import axios from "../../utils/axios";
+import { getFriendsList } from "../../services/userServices";
+
 
 const FriendListWidget = ({ userId ,isHome}) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const friends = useSelector((state) => state.user.friends);
 
+
+
   const getFriends = async () => {
     try {
-      const response = await axios.get(`/users/${userId}/friends`);
-      const data = response.data;
-      dispatch(setFriends({ friends: data }));
+      const response = await getFriendsList(userId);
+      dispatch(setFriends({ friends: response }));
     } catch (error) {
       console.error(error);
     }
@@ -26,6 +28,7 @@ const FriendListWidget = ({ userId ,isHome}) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
+    
     <WidgetWrapper  
     sx={{
       backgroundColor:isHome ?"transparent":undefined,

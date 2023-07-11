@@ -33,6 +33,10 @@ const UserSchema= new mongoose.Schema(
             type:Array,
             default:[]
         },
+        reportedPost: {
+            type: Array,
+            default: [],
+        },
         isblock:{
             type:Boolean,
             default:false

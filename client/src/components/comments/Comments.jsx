@@ -6,8 +6,8 @@ import {
   IconButton,
 } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import axios from "../../utils/axios";
 import FlexBetween from 'components/FlexBetween';
+import { addComment } from '../../services/userServices';
 
 const CommentBox = ({ postId,onCommentAdded }) => {
   const { _id } = useSelector((state) => state.user);
@@ -23,8 +23,7 @@ const CommentBox = ({ postId,onCommentAdded }) => {
     if (!comment) return;
 
     try {
-      const response = await axios.post(`/posts/${postId}/comments/${_id}`, { comment });
-      console.log(response.data);
+      const response = await addComment(postId, _id, comment);
       setComment('');
       onCommentAdded();
     } catch (error) {

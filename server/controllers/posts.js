@@ -1,5 +1,6 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import ReportModel from "../models/reportPost.js";
 
  
 export const createPost = async(req,res)=>{
@@ -100,6 +101,40 @@ export const createComment = async (req, res) => {
 
 
 
+export const reportPost = async (req, res) => {
+  try {
+    const { postId, _Id } = req.params;
+    const post = await Post.findById(postId);
+    const user = await User.findById(_Id);
+ 
+    req.body.userId = _Id;
+    req.body.name = user.email;
+    req.body.postId = post._id;
+
+    req.body.post = post?.picturePath;
+    req.body.desc = post.description;
+    req.body.type = "post";
+
+    if (post?.reports.filter((e) => e === _Id).length <= 0) {
+      await User.updateOne({ $push: { reportedPost: req.body.postId.toString() } });
+      await Post.updateOne({ $push: { reports: _Id } });
+      const newReport = new ReportModel(req.body);
+      const savedReport = await newReport.save();
+      res.status(200).json(savedReport);
+  } else {
+      res.status(403).json("You already reported this post");
+  }
+} catch (err) {
+  res.status(500).json(err);
+  console.log(err);
+}
+}
+
+
+
+
+
+
 
 export const likePost = async(req,res)=>{
     try{
@@ -146,8 +181,60 @@ const deleteComment=async(req,res)=>{
     }
 }
 
+export const allReports = async (req, res) => {
+  try {
+      const reports = await ReportModel.find();
+      res.status(200).json(reports);
+  } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+  }
+}
 
 
 
+export const rejectReport = async (req, res) => {
+  try {
+      console.log(req.query.name, "userid")
+      console.log(req.params.id, "postid")
+      var isPostFound = true;
+      const post = await Post.findById(req.params.id)
+      if (!post) {
+          res.status(403).json("Post not found");
+          isPostFound = false;
+      }
+      await post.updateOne({ $pull: { reports: req.query.name } }).then((res) => {
+      })
+      await ReportModel.deleteMany({ _id: req.query.id })
+      res.status(200).json("Report Removed")
+  } catch (error) {
+      if (isPostFound) {
+          res.status(500).json(error)
+      }
+      console.log(error)
+  }
+}
 
-export default { createPost,getFeedPosts,getUserPosts,likePost,deletePost ,createComment,deleteComment};
+
+export const resolveReport = async (req, res) => {
+  try {
+      var isPostFound = true
+      const post = await Post.findById(req.params.id)
+      if (!post) {
+          res.status(403).json("Post not found !")
+          isPostFound = false;
+      }
+      await post.deleteOne()
+      await ReportModel.deleteMany({ _id: req.query.id })
+      res.status(200).json('Post deleted!')
+
+  } catch (error) {
+      if (isPostFound) {
+          res.status(500).json(error)
+      }
+      console.log(error);
+  }
+}
+
+
+export default { createPost,getFeedPosts,getUserPosts,likePost,deletePost ,createComment,deleteComment,reportPost,allReports,rejectReport,resolveReport};

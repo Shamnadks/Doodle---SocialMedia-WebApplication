@@ -9,8 +9,9 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { Box, Divider, IconButton, Typography, useTheme,List,ListItem  } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
+import Modal from 'react-modal'
 import WidgetWrapper from "components/WidgetWrapper";
-import React,{ useState,useEffect } from "react";
+import React,{ useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { formatDistanceToNow } from "date-fns";
@@ -20,6 +21,42 @@ import Swal from 'sweetalert2';
 import "./PostWidget.css";
 import axios from "../../utils/axios";
 import CommentBox from "../../components/comments/Comments";
+import CloseIcon from '@mui/icons-material/Close';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+
+
+
+
+const customStyles = {
+  overlay: {
+    backgroundColor: 'transparent',
+    zIndex: '1000',
+  },
+
+  content: {
+    color: 'black',
+    borderRadius: '10px',
+    backgroundColor:'transparent',
+    backdropFilter: 'blur(90px)',
+    border: 'solid 1px #ccc',
+    width: '20%',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement('#root')
 
 
 const PostWidget = ({
@@ -34,13 +71,35 @@ const PostWidget = ({
   comments,
   createdAt,
   onCommentAdded,
+  onPostDeleted,
 }) => {
   const [isComments, setIsComments] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const user = useSelector(state=>state.user);
+  const [desc, setDesc] = useState('');
+  const [report, setReport] = useState('other')
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
+
+  const [err, setErr] = useState(null)
+  let subtitle;
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+
+  function afterOpenModal() {
+    subtitle.style.color = 'black';
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
@@ -84,7 +143,54 @@ const PostWidget = ({
 
     );
   };
-  
+
+    
+
+  const handleReport = () => {
+    if (report === "other" && desc.trim().length !== 0 && desc != null) {
+      axios.put(`posts/${postId}/report/${user._id}`, { reason: desc }).then((res) => {
+        Swal.fire({
+          title: 'Reported!',
+          text: 'Thanks for reporting',
+          icon: 'success',
+          confirmButtonText: 'Continue'
+        })
+        closeModal()
+        setDesc("")
+        setMenuOpen(false)
+        setErr(null)
+      }).catch((err) => {
+        console.log(err)
+        setErr(err.response.data)
+      })
+    } else if (report !== "other") {
+      axios.put(`posts/${postId}/report/${user._id}`, { reason: report }).then((res) => {
+        Swal.fire({
+          title: 'Reported!',
+          text: 'Thanks for reporting',
+          icon: 'success',
+          confirmButtonText: 'ok'
+        })
+        closeModal()
+        setDesc("")
+        setMenuOpen(false)
+        setErr(false)
+
+      }).catch((err) => {
+        setErr(err.response.data)
+      })
+
+    }
+    else {
+      toast("Please specify reason")
+    }
+  }
+
+
+
+
+
+
 
 
 
@@ -116,6 +222,7 @@ const PostWidget = ({
           });
           const data = response.data;
           if (response.status === 200) {
+            onPostDeleted(postId);
             toast.success('Post deleted successfully');
             dispatch(setPost({ post: data }));
           } else {
@@ -185,6 +292,36 @@ const patchLike = async () => {
           src={`${picturePath}`}
         />
       )}
+
+
+      <Modal
+      isOpen={modalIsOpen}
+      onAfterOpen={afterOpenModal}
+      onRequestClose={closeModal}
+      style={customStyles}
+      contentLabel="Example Modal"
+    >
+      <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Report Post</h2>
+      <CloseIcon onClick={closeModal} className="close" />
+      <FormControl>
+        <FormLabel id="demo-radio-buttons-group-label">Please specify reason</FormLabel>
+        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="other" name="radio-buttons-group">
+          <FormControlLabel value="spam" control={<Radio />} label="Spam" onChange={e => { setReport(e.target.value) }} />
+          <FormControlLabel value="fraud" control={<Radio />} label="Fraud" onChange={e => setReport(e.target.value)} />
+          <FormControlLabel value="false information" control={<Radio />} label="False information" onClick={e => setReport(e.target.value)} />
+          <FormControlLabel value="other" control={<Radio />} label="Other" onClick={e => setReport(e.target.value)} />
+        </RadioGroup>
+        {report === "other" && <TextField id="standard-basic" label="please say more about it" variant="standard" onChange={e => setDesc(e.target.value)} />}
+        {err && <span style={{ top: "2rem", color: "red" }} className="err">{err}</span>}
+        <Button variant="contained" endIcon={<SendIcon />} className="sendButton" onClick={handleReport}>Send</Button>
+      </FormControl>
+    </Modal>
+
+
+
+
+
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
@@ -212,7 +349,7 @@ const patchLike = async () => {
         </IconButton>
 
       {loggedInUserId !== postUserId ?
-        (<IconButton >
+        (<IconButton onClick={openModal} >
         <Report /> 
     </IconButton>) : (<IconButton  onClick={()=>deletePost(postId)}>
     <DeleteForeverRoundedIcon /> 

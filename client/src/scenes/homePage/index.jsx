@@ -27,7 +27,7 @@ const HomePage =()=>{
         gap="0.5rem"
         justifyContent="space-between">
             <Box flexBasis={isNonMobileScreen?"26%": undefined}>
-                <UserWidget userId={_id} picturePath={picturePath} />
+                <UserWidget userId={_id} picturePath={picturePath}  isHome/>
             </Box>
             <Box flexBasis={isNonMobileScreen?"42%": undefined} mt={isNonMobileScreen? undefined :"2rem"}>
             <MyPostWidget picturePath={picturePath} />

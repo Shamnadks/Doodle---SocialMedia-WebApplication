@@ -23,7 +23,7 @@ import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { setPosts,setPostAdded } from "state";
 import toast from "react-hot-toast";
 import axios from "../../utils/axios";
 import { uploadPost } from "../../utils/constants";
@@ -50,12 +50,12 @@ const MyPostWidget = ({ picturePath }) => {
         formData.append("picture", image);
         formData.append("picturePath", image.name);
       }
-  
       const response = await axios.post(uploadPost, formData);
       const posts = response.data;
       dispatch(setPosts({ posts }));
       setImage(null);
       setPost("");
+      dispatch(setPostAdded());
     } catch (error) {
       console.error(error);
     }

@@ -117,7 +117,7 @@ const Form = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
 
 

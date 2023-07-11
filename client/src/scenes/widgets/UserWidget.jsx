@@ -4,7 +4,7 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Divider, useTheme,useMediaQuery  } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
 
 const UserWidget = ({ userId, picturePath ,isHome}) => {
+  const isNonMobileScreen =useMediaQuery('(min-width:1000px)');
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
   const navigate = useNavigate();
@@ -57,7 +58,11 @@ const UserWidget = ({ userId, picturePath ,isHome}) => {
   } = user;
 
   return (
-    <WidgetWrapper 
+    <WidgetWrapper  sx={{
+       position: isHome&&isNonMobileScreen? "fixed": undefined,
+      width: isHome&&isNonMobileScreen ? "23%": undefined,
+      
+    }} p="0.2rem 6%"
     >
       {/* FIRST ROW */}
       <FlexBetween

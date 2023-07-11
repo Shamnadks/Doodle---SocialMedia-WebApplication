@@ -51,6 +51,10 @@ const postSchema = new mongoose.Schema({
         type:Map,
         of: Boolean,
     },
+    reports: {
+        type: Array,
+        default: [],
+      },
     comments: [commentSchema],
     createdAt: {
         type: Date,

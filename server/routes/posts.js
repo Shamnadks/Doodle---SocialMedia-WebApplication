@@ -15,6 +15,11 @@ router.get("/:userId/posts",verifyToken,postController.getUserPosts);
 router.post("/:postId/comments/:_Id",postController.createComment);
 router.delete("/:postId/comments/:_Id",postController.deleteComment);
 
+router.put("/:postId/report/:_Id",postController.reportPost);
+router.get("/reports/:id", postController.allReports);
+router.delete("/:id/report", postController.rejectReport);
+router.delete("/:id/rejectReport", postController.resolveReport);
+
 router.post("/",verifyToken,upload.single("picture"),postController.createPost);
 router.patch("/:id/like",verifyToken,postController.likePost);
 

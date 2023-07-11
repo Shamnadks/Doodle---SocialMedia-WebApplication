@@ -1,13 +1,13 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import Navbar from "scenes/navbar";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 import axios from "../../utils/axios";
+import backgroundImage from "./prfbg.jpg";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -32,7 +32,13 @@ const ProfilePage = () => {
   if (!user) return null;
 
   return (
-    <Box>
+    <Box sx={{
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh',
+    }}>
       <Navbar />
       <Box
         width="100%"

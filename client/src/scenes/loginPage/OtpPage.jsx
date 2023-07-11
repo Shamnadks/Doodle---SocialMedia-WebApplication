@@ -1,6 +1,6 @@
 import { Box, Typography, useMediaQuery, TextField, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import backgroundImage from "./background1.jpg";
+import backgroundImage from "./prfbg.jpg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";

@@ -5,5 +5,4 @@ export const loginUser = "auth/login";
 export const verifyOtp="auth/verifyOTP";
 export const uploadPost ="/posts";
 export const getPost ="/posts";
-export const getUsers ="/admin/users";
 export const adminLogin="/admin/login";

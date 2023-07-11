@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { setPosts} from "state";
 import PostWidget from "./PostWidget";
 import axios from "../../utils/axios";
 import { getPost } from "../../utils/constants";
@@ -9,32 +9,41 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
-  const [page, setPage] = useState(1);
+  const postAdded = useSelector((state) => state.postAdded);
+  const [page, setPage] = useState(1); 
+  const [loading, setLoading] = useState(false);
 
   const getPosts = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(getPost);
       const data = response.data;
       dispatch(setPosts({ posts: data }));
       setPage(1);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const getUserPosts = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`/posts/${userId}/posts`);
       const data = response.data;
       dispatch(setPosts({ posts: data }));
       setPage(1);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   const loadMorePosts = async () => {
     try {
+      setLoading(true);
       const nextPage = page + 1;
       let response;
       if (isProfile) {
@@ -45,8 +54,10 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       const data = response.data;
       dispatch(setPosts({ posts: [...posts, ...data] }));
       setPage(nextPage);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
@@ -58,21 +69,31 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   };
 
-
-  useEffect(() => {
+  const handlePostDeleted = () => {
     if (isProfile) {
       getUserPosts();
     } else {
       getPosts();
     }
-  }, [isProfile, userId]);
+  };
+
+
+
+  useLayoutEffect(() => {
+    if (isProfile) {
+      getUserPosts();
+    } else {
+      getPosts();
+    }
+  }, [isProfile, userId, postAdded]);
+
 
   return (
     <>
       {posts.length === 0 ? (
         <div>
           <img
-            style={{ marginLeft: "130px",height:"200px" }}
+            style={{ marginLeft: "130px", height: "200px" }}
             src="https://usagif.com/wp-content/uploads/2022/hqgif/ghost-50-pixel-ghost-transparent-background.gif"
             alt="no posts"
           />
@@ -94,7 +115,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           dataLength={posts.length}
           next={loadMorePosts}
           hasMore={true}
-          loader={<h4>Loading...</h4>}
+          loader={loading && <h4>Loading...</h4>}
         >
           {posts.map(
             ({
@@ -123,6 +144,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
                 comments={comments}
                 createdAt={createdAt}
                 onCommentAdded={handleCommentAdded}
+                onPostDeleted={handlePostDeleted}
               />
             )
           )}

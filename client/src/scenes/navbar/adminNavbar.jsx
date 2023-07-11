@@ -2,7 +2,9 @@ import { useState } from "react";
 import { setAdminLogout} from "state";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Book from "@mui/icons-material/Book";
 import { Search,Menu,Close } from "@mui/icons-material";
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import FlexBetween from "components/FlexBetween";
 import { Box ,
     IconButton,
@@ -59,6 +61,14 @@ Doodle Admin
     
     <IconButton>
     <Search />
+    </IconButton>
+
+    <IconButton onClick={()=>navigate("/reports")}>
+    <Book />
+    </IconButton>
+
+    <IconButton onClick={()=>navigate("/AdminHome")}>
+    <GroupAddIcon />
     </IconButton>
     </FlexBetween>
 )}
