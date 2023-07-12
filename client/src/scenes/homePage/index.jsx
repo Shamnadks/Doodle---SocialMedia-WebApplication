@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
-import backgroundImage from "./home.jpg";
 
 const HomePage =()=>{
     const isNonMobileScreen =useMediaQuery('(min-width:1000px)');
@@ -13,7 +12,7 @@ const HomePage =()=>{
 
     return ( 
     <Box  sx={{
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(https://res.cloudinary.com/dwpsyo2te/image/upload/v1689144066/SOCIAL-MEDIA/nukwpjw7hkch6qqj1i9w.jpg)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',

@@ -1,7 +1,6 @@
 
 import { Box ,Typography,useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
-import backgroundImage from "./prfbg.jpg";
 
 
 
@@ -13,7 +12,7 @@ const LoginPage =()=>{
     return (<Box sx={{
         display: "flex",
         flexDirection: "column",
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(https://res.cloudinary.com/dwpsyo2te/image/upload/v1689142916/SOCIAL-MEDIA/uug1xr9htlcktwyw5dau.jpg)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",

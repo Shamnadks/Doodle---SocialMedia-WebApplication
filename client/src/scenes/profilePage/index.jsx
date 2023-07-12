@@ -33,7 +33,7 @@ const ProfilePage = () => {
 
   return (
     <Box sx={{
-      backgroundImage: `url(${backgroundImage})`,
+      backgroundImage: `url(https://res.cloudinary.com/dwpsyo2te/image/upload/v1689142916/SOCIAL-MEDIA/uug1xr9htlcktwyw5dau.jpg)`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',

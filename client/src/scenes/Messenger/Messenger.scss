@@ -1,0 +1,164 @@
+@import "../../Style.scss";
+
+.messenger {
+  @include themify($themes) {
+  
+    width: 89%;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 1px;
+    margin-top: 7rem;
+
+  height: calc(100vh - 106px);
+  display: flex;
+}
+
+
+
+
+
+.chatMenu {
+  flex: 3;
+}
+
+.chatMenuInput{
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 2px solid;
+  font-size: 1rem;
+  font-weight: 800;
+  border-right: solid;
+  // position: fixed;
+  // background-color: gray;
+  // z-index: 9;
+ 
+
+}
+
+.chatBox {
+  flex: 6;
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.chatBoxTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.chatBoxBottom {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatMessageInput {
+  width: 80%;
+  height: 21px;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.chatSubmitButton {
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: teal;
+  color: white;
+}
+
+.chatOnline {
+ flex: 3; 
+}
+.chatMenuWrapper{
+  border-right: solid 2px;
+  height: 91%!important;
+}
+.chatMenuWrapper,
+.chatBoxWrapper,
+.chatOnlineWrapper {
+  padding: 10px;
+  height: 96%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1f5f9;
+  border-radius: 1rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #f1f5f9;
+}
+
+.noConversationText {
+  position: absolute;
+  top: 10%;
+  font-size: 50px;
+  color: rgb(224, 220, 220);
+  cursor: default;
+}
+
+@media screen and (max-width: 768px) {
+  .chatMenu {
+    flex: 6;
+  }
+
+  // .chatMenuInput {
+  //   display: none;
+  // }
+
+  .chatBox{
+    flex: 6;
+  }
+
+  .chatOnline{
+    display: none;
+  }
+  .msgReq{
+    display: none;
+  }
+}
+.messageImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+.receiver{
+  position: absolute;
+  padding-left: 48px;
+}
+}
+.msgReq{
+  text-align: end;
+    margin-right: 5rem;
+    position: absolute;
+    width: 79%;
+    margin-top: 1rem;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}

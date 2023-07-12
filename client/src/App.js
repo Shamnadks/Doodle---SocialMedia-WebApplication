@@ -3,6 +3,7 @@ import HomePage from 'scenes/homePage';
 import AdminDashboard from 'scenes/adminDashboard';
 import ReportsPage from 'scenes/reportsPage';
 import LoginPage from 'scenes/loginPage';
+import Messenger from 'scenes/Messenger/Messenger';
 import OtpPage from 'scenes/loginPage/OtpPage';
 import AdminLoginPage from 'scenes/adminLoginPage';
 import ProfilePage from "scenes/profilePage";
@@ -36,6 +37,7 @@ function App() {
          <Route path="/admin" element={isAdminAuth?<Navigate to="/adminHome" />:<AdminLoginPage/>} /> 
          <Route path="/AdminHome" element={isAdminAuth?<AdminDashboard/> : <Navigate to="/admin" />} /> 
          <Route path="/profile" element={isAuth ? <ProfilePage /> : <Navigate to="/" />}/>
+         <Route path="/chat" element={isAuth ? <Messenger /> : <Navigate to="/" />}/>
          <Route path="/reports" element={isAdminAuth? <ReportsPage /> : <Navigate to="/admin" />}/>
          <Route path="*" element={ <Error />}/>
         </Routes>

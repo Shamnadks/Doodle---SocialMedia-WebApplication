@@ -1,6 +1,5 @@
 import { Box, Typography, useMediaQuery, TextField, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import backgroundImage from "./prfbg.jpg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -87,7 +86,7 @@ const OtpPage = () => {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(https://res.cloudinary.com/dwpsyo2te/image/upload/v1689142916/SOCIAL-MEDIA/uug1xr9htlcktwyw5dau.jpg)`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
