@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
@@ -63,6 +62,4 @@ mongoose.connect(process.env.MONGO_URL,{
     useUnifiedTopology:true,
     }).then(()=>{
         app.listen(PORT,()=>console.log(`Server Port : ${PORT}`));
-        // User.insertMany(users);
-        // Post.insertMany(posts);
     }).catch((error)=> console.log(`${error} did not connect`));

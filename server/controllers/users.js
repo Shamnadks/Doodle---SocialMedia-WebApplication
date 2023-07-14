@@ -66,4 +66,26 @@ export const addRemoveFriend = async(req,res)=>{
     }
 }
 
-export default { getUser,getUserFriends,addRemoveFriend };
+
+export const getSearchUsers = async(req,res)=>{
+    try{
+        console.log("searching");
+        const {search}= req.params;
+        const users = await User.find({
+            $or:[
+                {firstName:{$regex:search,$options:"i"}},
+                {lastName:{$regex:search,$options:"i"}},
+            ],
+        });
+        const formattedUsers = users.map(({ _id,firstName,lastName,occupation,location,picturePath })=> {
+            return { _id,firstName,lastName,occupation,location,picturePath }
+        });
+        console.log(formattedUsers);
+        res.status(200).json(formattedUsers);
+    }catch(err){
+        res.status(404).json({message:err.message});
+    }
+}
+
+
+export default { getUser,getUserFriends,addRemoveFriend,getSearchUsers};

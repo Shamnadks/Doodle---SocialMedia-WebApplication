@@ -14,10 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode,setLogout} from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
+import Friend from "components/Friend";
 
 
 const Navbar =()=>{
-
+const [input,setInput]=useState("");
+const [results,setResults]=useState([]);
 const [isMobileMenuToggled, SetIsMobileMenuToggled] = useState(false);
 const dispatch = useDispatch();
 const navigate = useNavigate();
@@ -35,7 +37,28 @@ const fullName = `${user.firstName} ${user.lastName}`;
 
 
 
+const fetchSearchResults = async (value) => {
+    console.log("seaaarchingggggg");
+    if (value.length > 0) {
+      try {
+        const response = await fetch(`http://localhost:3001/users/search/${value}`);
+        const data = await response.json();
+        setResults(data);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setResults([]);
+    }
+  };
 
+
+
+
+const handleChange =(value)=>{
+    setInput(value);
+    fetchSearchResults(value);
+}
 
     return (<FlexBetween padding="1rem 6%" 
     // backgroundColor={alt}
@@ -62,12 +85,35 @@ onClick={()=>navigate("/home")}
 Doodle
 </Typography>
 {isNonMobileScreens && (
+    <div>
     <FlexBetween backgroundColor={neutralLight} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-    <InputBase placeholder="Search...." />
+    <InputBase placeholder="Search...." onChange={(e)=>handleChange(e.target.value)}  value={input}/>
     <IconButton>
     <Search />
     </IconButton>
     </FlexBetween>
+
+    {/* search results */}
+    {results.length > 0 && (
+        
+        <Box position="absolute"  width="22%" backgroundColor={neutralLight} zIndex="10" borderRadius="0.5rem" marginTop="0.5rem" padding="0.8rem 0.8rem" sx={{
+          maxHeight:"300px",
+          overflowY:"scroll",
+          "&::-webkit-scrollbar": {
+            width: "0.25rem",
+          }, 
+        }}>
+        {results.map((result)=>(
+            <Box marginTop="0.5rem" >
+            <Friend key={result._id} friendId={result._id} name={`${result.firstName} ${result.lastName}`} subtitle={result.email} userPicturePath={result.picturePath}  />
+            </Box>
+        ))}
+        </Box>
+
+    )}
+    </div>
+
+   
 )}
 </FlexBetween>
 
