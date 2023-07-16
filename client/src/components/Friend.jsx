@@ -11,8 +11,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
-  const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends);
+  const following = useSelector((state) => state.user.following);
 
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
@@ -20,15 +19,13 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends.find((friend) => friend._id === friendId);
-
-
+  const isFriend = following.find((friend) => friend._id === friendId);
 
 
 
   const patchFriend = async () => {
     const response = await patchFriends(_id, friendId);
-    dispatch(setFriends({ friends: response }));
+    dispatch(setFriends({ following: response }));
   };
 
 

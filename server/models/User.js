@@ -29,9 +29,13 @@ const UserSchema= new mongoose.Schema(
                 "https://www.kindpng.com/picc/m/780-7804962_cartoon-avatar-png-image-transparent-avatar-user-image.png",
         
         },
-        friends:{
-            type:Array,
-            default:[]
+        followers: {
+            type: Array,
+            default: []
+        },
+        following: {
+            type: Array,
+            default: []
         },
         reportedPost: {
             type: Array,
