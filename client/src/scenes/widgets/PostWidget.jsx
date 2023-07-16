@@ -74,6 +74,7 @@ const PostWidget = ({
   onPostDeleted,
 }) => {
   const [isComments, setIsComments] = useState(false);
+  const [islike, setIsLike] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const user = useSelector(state=>state.user);
   const [desc, setDesc] = useState('');
@@ -81,8 +82,7 @@ const PostWidget = ({
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
-  const isLiked = Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;
+  const isLiked = likes.some((like) => like.userId === loggedInUserId);
 
   const [err, setErr] = useState(null)
   let subtitle;
@@ -104,6 +104,18 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+
+
+
+  const handlelikedUsersList = () => {
+    setIsComments(false)
+    setIsLike(!islike)
+  }
+  
+  const handleCommentList = () => {
+    setIsLike(false)
+    setIsComments(!isComments)
+  }
 
 
   const handleDeleteComment = (commentId) => {
@@ -248,8 +260,8 @@ const patchLike = async () => {
         "Content-Type": "application/json",
       },
     });
-    const updatedPost = response.data;
-    dispatch(setPost({ post: updatedPost }));
+    dispatch(setPost({ post: response }));
+    onCommentAdded();
   } catch (error) {
     console.error(error);
   }
@@ -258,8 +270,9 @@ const patchLike = async () => {
 
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
   const commentTimeAgoList = comments.map((comment) =>
-  formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })
-);
+  formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true }));
+  const likesTimeAgoList = likes.map((like) =>
+  formatDistanceToNow(new Date(like.createdAt), { addSuffix: true }));
 
   return (
     <WidgetWrapper m="2rem 0"  sx={{
@@ -333,14 +346,16 @@ const patchLike = async () => {
                 <FavoriteBorderOutlined />
               )}
             </IconButton>
-            <Typography>{likeCount}</Typography>
+            <IconButton onClick={() => handlelikedUsersList()}>
+            <Typography>{likes.length} Likes</Typography>
+            </IconButton>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => setIsComments(!isComments)}>
+            <IconButton onClick={() => handleCommentList()}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments.length}</Typography>
+            <Typography>{comments.length} Comments</Typography>
           </FlexBetween>
         </FlexBetween>
 
@@ -394,6 +409,34 @@ const patchLike = async () => {
         </List>
       </Box>
     )}
+
+    {!isComments && islike && (<>
+      <Typography variant="subtitle2" sx={{ mt: '0.5rem' }}>People who Liked Your Post</Typography>
+    <Box  maxHeight="200px" sx={{ overflow: 'auto', '&::-webkit-scrollbar': { display: 'none' } }}>
+        <List sx={{ width: '100%' }}>
+          {likes.map((like, i) => (
+            <React.Fragment key={i}>
+              <ListItem disablePadding>
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                  <Box sx={{ borderRadius: '50%', overflow: 'hidden', marginRight: '0.5rem' }}>
+                    <img src={like.userPicturePath} alt="User Profile" width="40px" height="40px" style={{ borderRadius: '50%' , marginTop:"10px" }} />
+                  </Box>
+                  <Box sx={{ flex: '1' }}>
+                    <Typography variant="subtitle2">{like.firstName} {like.lastName} 💙</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="caption" color="textSecondary" sx={{ marginRight: '0.5rem' }}>
+                     {likesTimeAgoList[i]}
+                    </Typography>
+                  </Box>
+                </Box>
+              </ListItem>
+              {i !== comments.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      </Box>
+      </>)}
   
     </WidgetWrapper>
   );

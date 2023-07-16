@@ -33,6 +33,28 @@ export const getUser = async (req, res) => {
     }
   };
 
+
+    export const getUserFollowers = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const user = await User.findById(id);
+
+            const followers = await Promise.all(
+                user.followers.map((followerId)=> User.findById(followerId))
+            );
+
+            const formattedFollowers = followers.map(({ _id,firstName,lastName,occupation,location,picturePath })=> {
+                return { _id,firstName,lastName,occupation,location,picturePath }
+            });
+
+            res.status(200).json(formattedFollowers);
+        } catch (err) {
+            res.status(404).json({ message: err.message });
+        }
+    };
+
+
+
 // update
 
 // export const addRemoveFriend = async(req,res)=>{
@@ -132,4 +154,4 @@ export const getSearchUsers = async(req,res)=>{
 
 
 
-export default { getUser,getUserFriends,addRemoveFriend,getSearchUsers};
+export default { getUser,getUserFriends,addRemoveFriend,getSearchUsers,getUserFollowers};

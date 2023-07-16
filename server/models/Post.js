@@ -30,6 +30,31 @@ const commentSchema = new Schema({
     },
   });
 
+const likeSchema = new Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
+    firstName: {
+        type: String,
+        required: true,
+        },
+    lastName: {
+        type: String,
+        required: true,
+        },
+    userPicturePath: {
+        type: String,
+        required: true,
+        },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
+
+
 const postSchema = new mongoose.Schema({
     userId:{
         type:String,
@@ -47,10 +72,7 @@ const postSchema = new mongoose.Schema({
     description:String,
     picturePath:String,
     userPicturePath:String,
-    likes:{
-        type:Map,
-        of: Boolean,
-    },
+    likes:[likeSchema],
     reports: {
         type: Array,
         default: [],

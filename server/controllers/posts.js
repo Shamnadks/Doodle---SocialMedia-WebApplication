@@ -133,27 +133,26 @@ export const reportPost = async (req, res) => {
 
 
 
-
-
-
 export const likePost = async(req,res)=>{
     try{
         const { id }= req.params;
         const { userId } = req.body;
+        const user = await User.findById(userId);
         const post = await Post.findById(id);
-        const isLiked = post.likes.get(userId);
-
-        if(isLiked){
-            post.likes.delete(userId);
+        if(!post.likes.find((like)=>like.userId==userId)){
+            await post.updateOne({$push:{likes:{userId:userId,firstName:user.firstName,lastName:user.lastName,userPicturePath:user.picturePath}}});
         }else{
-            post.likes.set(userId,true);
+            await post.updateOne({$pull:{likes:{userId:userId}}});
         }
-        const updatedPost = await Post.findByIdAndUpdate(id,{likes:post.likes},{new:true});
+        const updatedPost = await Post.findById(id);
         res.status(200).json(updatedPost);
     }catch(err){
         res.status(404).json({message:err.message})
     }
 }
+
+
+    
 
 const deletePost=async(req,res)=>{
     try{

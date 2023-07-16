@@ -28,5 +28,14 @@ export const getFriendsList = async (userId) => {
     }
     }
 
+export const getFollowersList = async (userId) => {
+    try {
+        const response = await axios.get(`/users/${userId}/followers`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+    }
 
+    
 
