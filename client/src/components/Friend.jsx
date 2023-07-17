@@ -6,6 +6,7 @@ import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import {patchFriends} from "../services/userServices";
+import axios from "../utils/axios";
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const patchFriend = async () => {
     const response = await patchFriends(_id, friendId);
     dispatch(setFriends({ following: response }));
+    await axios.get(`/conversations/find/${_id}/${friendId}`).then(async (response) => {
+      if (response.data == null) {
+        await axios.post(`/conversations/`, { senderId: _id, receiverId: friendId })
+      }
+    })
   };
 
 

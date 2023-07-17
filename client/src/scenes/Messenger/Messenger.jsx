@@ -5,12 +5,11 @@ import Conversation from "../../components/Conversation/Conversation";
 import Message from "../../components/Message/Message";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Box } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
 import { DarkmodeContext } from '../../Context/DarkmodeContext';
 import axios from '../../utils/axios';
 import InputEmoji from 'react-input-emoji'
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {SocketContext} from '../../Context/socketContext';
 import { useSelector } from "react-redux";
 
@@ -26,6 +25,7 @@ const customStyles = {
 }
 
 export default function Messenger() {
+  const navigate = useNavigate();
   const { darkMode } = useContext(DarkmodeContext);
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -39,9 +39,8 @@ export default function Messenger() {
 
   const currentUser = useSelector((state) => state.user);
   const scrollRef = useRef();
-  const queryClient = new QueryClient();
   const socket = useContext(SocketContext);
-  let subtitle;
+
 
   
 
@@ -71,7 +70,7 @@ export default function Messenger() {
     if (arrivalMessage) {
       if (!currentChat?.members.includes(arrivalMessage.sender)) {
         axios.get("/users/" + arrivalMessage.sender).then((res) => {
-          toast(`you have a message from ${res.data.username}`, {
+          toast(`you have a message from ${res.data.firstName}`, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -122,7 +121,7 @@ export default function Messenger() {
     const getConversations = async () => {
       try {
         const res = await axios.get("/conversations/" + currentUser._id);
-        const sortedConversations = res.data.length > 2 ? res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : res.data;
+        const sortedConversations = res.data.length > 1 ? res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : res.data;
         setConversations(sortedConversations);
       } catch (err) {
         console.log(err);
@@ -169,7 +168,6 @@ export default function Messenger() {
         (c) => c._id !== currentChat._id
       );
       setConversations([currentChat, ...filteredConversations]);
-
       setNewMessage("");
 
 
@@ -197,15 +195,25 @@ export default function Messenger() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       handleSubmit(event);
     }
   };
+
   const handleChange = (newMessage) => {
     setErr(false);
     setNewMessage(newMessage);
   };
+
+  const handleProfilePage = () => {
+    localStorage.removeItem("userId");
+    localStorage.setItem("userId", reciever._id);
+    navigate(`/profile`);
+  }
+
   return (
     <>
     <Box  sx={{
@@ -223,16 +231,16 @@ export default function Messenger() {
             <div className="messenger" 
              style={{
               backgroundColor:"transparent",
-        backdropFilter: "blur(20px)",
+        backdropFilter: "blur(50px)",
         borderRadius: "1.2rem",
              }}
              >
               <div className="chatMenu">
                 <input
-                  value="Inbox"
+                  value="Friends"
                   className="chatMenuInput"
                   disabled
-                  style={{ marginTop: "0.6rem", textAlign: "center" }}
+                  style={{ textAlign: "center", fontSize: "1.6rem", fontWeight: "bold"}}
                 />
                 <div className="chatMenuWrapper">
                   {conversations.map((c) => (
@@ -245,25 +253,25 @@ export default function Messenger() {
               <div className="chatBox">
                 <div className="chatBoxWrapper">
                   {currentChat && (
-                    <><Link to={`/profile/${reciever?._id}`} style={{ zIndex: "1000" }}>
+                    <><div onClick={()=>handleProfilePage} style={{ zIndex: "1000" }}>
                       <img
                         className="messageImg"
                         src={
-                          reciever?.profilePicture.length !== 0
-                            ? reciever?.profilePicture
+                          reciever?.picturePath.length !== 0
+                            ? reciever?.picturePath
                             : "https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
                         }
                         alt=""
-                      /></Link></>
+                      /></div></>
                   )}
                   <input
-                    value={reciever ? reciever.username : "chat"}
+                    value={reciever ? reciever.firstName +" "+ reciever.lastName : "chat"}
                     className="receiver chatMenuInput"
                     disabled
                   />
                   {currentChat ? (
                     <>
-                      <div className="chatBoxTop mt-3">
+                      <div className="chatBoxTop">
                         {messages.map((m) => (
                           <div ref={scrollRef} key={m.createdAt}>
                             <Message

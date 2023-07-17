@@ -6,8 +6,8 @@
     width: 89%;
     margin-left: auto;
     margin-right: auto;
-    border: solid 1px;
-    margin-top: 7rem;
+    border: solid 2px;
+    margin-top: 5rem;
 
   height: calc(100vh - 106px);
   display: flex;
@@ -29,11 +29,11 @@
   font-size: 1rem;
   font-weight: 800;
   border-right: solid;
+  border-radius: 1.2rem;
+  color: rgb(39, 36, 36);
   // position: fixed;
-  // background-color: gray;
+  background-color: #00d5fa;
   // z-index: 9;
- 
-
 }
 
 .chatBox {
@@ -51,7 +51,6 @@
   height: 100%;
   overflow-y: scroll;
   padding-right: 10px;
-  margin-bottom: 1.5rem;
 }
 
 .chatBoxBottom {
@@ -83,22 +82,21 @@
 }
 .chatMenuWrapper{
   border-right: solid 2px;
-  height: 91%!important;
+  height: 90%!important;
 }
 .chatMenuWrapper,
 .chatBoxWrapper,
 .chatOnlineWrapper {
-  padding: 10px;
   height: 96%;
   overflow-y: auto;
   overflow-x: hidden;
 }::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #00c9bf;
 }
 
 /* Handle */
@@ -109,14 +107,15 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #f1f5f9;
+  background: #e25f48;
 }
 
 .noConversationText {
   position: absolute;
-  top: 10%;
-  font-size: 50px;
-  color: rgb(224, 220, 220);
+  top: 50%;
+  left: 35%;
+  font-size: 1rem;
+  color: rgb(0, 164, 185);
   cursor: default;
 }
 
@@ -141,15 +140,21 @@
   }
 }
 .messageImg {
-  width: 32px;
-  height: 32px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
+
 }
 .receiver{
   position: absolute;
-  padding-left: 48px;
+  padding-left: 60px;
+  height: 10%;
+  color:#00d5fa;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background-color:rgb(39, 36, 36);
 }
 }
 .msgReq{
