@@ -149,9 +149,39 @@ export const getSearchUsers = async(req,res)=>{
     }
 }
 
+export const editUser = async(req,res)=>{
+    try{
+        const {userId,firstName,lastName,occupation} = req.body;
+        const user = await User.findById(userId);
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.occupation = occupation;
+        await user.save();
+        res.status(200).json(user);
+    }catch(err){
+        res.status(404).json({message:err.message});
+    }
+}
+
+
+export const editUserWithImage = async(req,res)=>{
+    try{
+        const {userId,firstName,lastName,occupation} = req.body;
+        const picturePath = req.file.path;
+
+        const user = await User.findById(userId);
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.occupation = occupation;
+        user.picturePath = picturePath;
+        await user.save();
+        res.status(200).json(picturePath);
+    }catch(err){
+        res.status(404).json({message:err.message});
+    }
+}
 
 
 
 
-
-export default { getUser,getUserFriends,addRemoveFriend,getSearchUsers,getUserFollowers};
+export default { getUser,getUserFriends,addRemoveFriend,getSearchUsers,getUserFollowers,editUser,editUserWithImage};

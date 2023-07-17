@@ -50,7 +50,7 @@ const MyPostWidget = ({ picturePath }) => {
         formData.append("picture", image);
         formData.append("picturePath", image.name);
       }
-      const response = await axios.post(uploadPost, formData);
+      const response = await axios.post(uploadPost,formData);
       const posts = response.data;
       dispatch(setPosts({ posts }));
       setImage(null);

@@ -36,6 +36,9 @@ export const authSlice = createSlice({
             state.admin = null;
             state.adminToken = null;
         },
+        setProfilePicture:(state,action)=>{
+            state.user.picturePath = action.payload.picturePath;
+        },
         setFriends:(state,action)=>{
             if(state.user){
                 state.user.following = action.payload.following;
@@ -61,5 +64,5 @@ export const authSlice = createSlice({
     }
 })
 
-export const {setMode,setLogin,setLogout,setFriends,setPosts,setPost,setAdminLogin,setAdminLogout,setPostAdded} = authSlice.actions;
+export const {setMode,setLogin,setLogout,setFriends,setPosts,setPost,setAdminLogin,setAdminLogout,setPostAdded,setProfilePicture} = authSlice.actions;
 export default authSlice.reducer;

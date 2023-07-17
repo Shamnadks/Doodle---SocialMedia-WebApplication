@@ -40,12 +40,13 @@ const FriendListWidget = ({ userId ,isHome}) => {
 
   useEffect(() => {
     getFriends();
-  }, [friends]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  
 
 
   useEffect(() => {
     getFollowers();
-  }, [followers]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   const handleFollowers = () => {
@@ -55,7 +56,7 @@ const FriendListWidget = ({ userId ,isHome}) => {
   
   const handleFollowing = () => {
     setIsFollowing(!isFollowing);
-      getFriends();
+      getFriends(); 
   };
   
 
