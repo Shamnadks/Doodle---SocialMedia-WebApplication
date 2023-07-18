@@ -154,7 +154,6 @@ const Applications = () => {
       headerName: "Image",
       width: 130,
       renderCell: (params) => {
-        console.log(params, "params apps");
         return <img className="image" style={{height:"100px"}} src={params.row.post || "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg"} alt="No image" />;
       },
     },
@@ -197,7 +196,7 @@ const Applications = () => {
       },
     },
   ];
-  console.log(err);
+
   return (
     <div className="datatable">
       <div className="datatableTitle">Reports</div>

@@ -13,12 +13,8 @@ import postRoutes from "./routes/posts.js";
 import adminRoutes from "./routes/admin.js";
 import ConversationRoute from "./routes/ConversationRoute.js";
 import MessageRoute from "./routes/MessageRoute.js";
-import NotificationRoute from "./routes/NotificationRoute.js"
 
 
-// import User from "./models/User.js";
-// import Post from "./models/Post.js";
-// import { users , posts } from "./data/index.js";
 
 // CONFIGURATION
 
@@ -36,21 +32,14 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname,'public/assets')));
 
 
-// FiLE STORAGE
 
-
-
-// ROUTES WITH FILES
-
-
-// ROUTES WITHOUT FILES
+// ROUTES 
 app.use("/auth",authRoutes);
 app.use("/users",userRoutes);
 app.use("/posts",postRoutes);
 app.use("/admin",adminRoutes);
 app.use('/conversations', ConversationRoute)
 app.use('/messages', MessageRoute);
-app.use('/notifications', NotificationRoute)
 
 // mongoose
 

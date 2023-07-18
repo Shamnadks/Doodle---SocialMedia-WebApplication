@@ -11,6 +11,4 @@ router.get("/find/:firstUserId/:secondUserId", getConvIncTwo);
 
 
 
-// router.post("/markasread", updateRead)
-
 export default router

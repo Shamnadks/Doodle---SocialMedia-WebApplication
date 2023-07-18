@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { setAdminLogout} from "state";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Book from "@mui/icons-material/Book";
 import { Search,Menu,Close } from "@mui/icons-material";
@@ -22,22 +22,17 @@ import { Box ,
 
 
 const AdminNavbar =()=>{
-    const [isMobileMenuToggled, SetIsMobileMenuToggled] = useState(false);
-    const dispatch = useDispatch();
+
+const [isMobileMenuToggled, SetIsMobileMenuToggled] = useState(false);
+const dispatch = useDispatch();
 const navigate = useNavigate();
-const admin = useSelector(state=>state.admin);
-
 const theme = useTheme();
-const neutralLight = theme.palette.neutral.light;
-const dark= theme.palette.neutral.dark;
-const background = theme.palette.background.default;
-const primaryLight = theme.palette.primary.light;
 const alt = theme.palette.background.alt;
-
-
 const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-
 const fullName = "Admin"
+
+
+
 
 return (
 

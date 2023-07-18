@@ -80,9 +80,9 @@ const PostWidget = ({
   const [desc, setDesc] = useState('');
   const [report, setReport] = useState('other')
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
   const isLiked = likes.some((like) => like.userId === loggedInUserId);
+
 
   const [err, setErr] = useState(null)
   let subtitle;
@@ -228,11 +228,7 @@ const PostWidget = ({
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.delete(`/posts/${postId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axios.delete(`/posts/${postId}`);
           const data = response.data;
           if (response.status === 200) {
             onPostDeleted(postId);
@@ -256,7 +252,6 @@ const patchLike = async () => {
       userId: loggedInUserId,
     }, {
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });

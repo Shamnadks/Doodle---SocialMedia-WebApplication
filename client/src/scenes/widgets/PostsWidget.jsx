@@ -13,6 +13,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const [page, setPage] = useState(1); 
   const [loading, setLoading] = useState(false);
 
+
+
   const getPosts = async () => {
     try {
       setLoading(true);
@@ -27,6 +29,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   };
 
+
   const getUserPosts = async () => {
     try {
       setLoading(true);
@@ -40,6 +43,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       setLoading(false);
     }
   };
+
 
   const loadMorePosts = async () => {
     try {
@@ -61,6 +65,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     }
   };
 
+
   const handleCommentAdded = () => {
     if (isProfile) {
       getUserPosts();
@@ -68,6 +73,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       getPosts();
     }
   };
+
 
   const handlePostDeleted = () => {
     if (isProfile) {
@@ -85,7 +91,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, [isProfile, userId, postAdded]);
+  }, [isProfile, userId, postAdded]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Button,
   TextField,
   IconButton,
 } from "@mui/material";
@@ -9,21 +8,23 @@ import SendIcon from '@mui/icons-material/Send';
 import FlexBetween from 'components/FlexBetween';
 import { addComment } from '../../services/userServices';
 
+
+
 const CommentBox = ({ postId,onCommentAdded }) => {
   const { _id } = useSelector((state) => state.user);
   const [comment, setComment] = useState('');
+
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!comment) return;
-
     try {
-      const response = await addComment(postId, _id, comment);
+     await addComment(postId, _id, comment);
       setComment('');
       onCommentAdded();
     } catch (error) {
@@ -31,6 +32,7 @@ const CommentBox = ({ postId,onCommentAdded }) => {
     }
   };
 
+  
   return (
     <form onSubmit={handleSubmit}>
     <FlexBetween>

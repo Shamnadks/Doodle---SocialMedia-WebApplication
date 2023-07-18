@@ -11,11 +11,6 @@ const FriendListWidget = ({ userId ,isHome}) => {
   const[followers,setFollowers]=useState([])
   const { palette } = useTheme();
   const [isFollowing, setIsFollowing] = useState(true); 
-  const dark = palette.neutral.dark;
-  const background = palette.background.default;
-  const neutralLight = palette.neutral.light;
-  const alt = palette.background.alt;
-  const primaryLight = palette.primary.light;
 
 
 
@@ -78,7 +73,6 @@ const FriendListWidget = ({ userId ,isHome}) => {
       borderRadius: "0.8rem",
       marginBottom: "0.5rem",
       backgroundColor: "transparent",
-      // Add any additional styles for the selected button
     }}
     onClick={() => handleFollowing()}
   >
@@ -96,7 +90,6 @@ const FriendListWidget = ({ userId ,isHome}) => {
       borderRadius: "0.8rem",
       marginBottom: "0.5rem",
       backgroundColor: "transparent",
-      // Add any additional styles for the selected button
     }}
     onClick={() => handleFollowers()}
   >

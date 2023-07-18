@@ -41,6 +41,9 @@ const MyPostWidget = ({ picturePath }) => {
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
+
+
+
   const handlePost = async () => {
     try {
       const formData = new FormData();
@@ -61,6 +64,8 @@ const MyPostWidget = ({ picturePath }) => {
     }
   };
 
+
+
    const handleDrop = (acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
     if (selectedFile && validImageTypes.includes(selectedFile.type)) {
@@ -70,6 +75,8 @@ const MyPostWidget = ({ picturePath }) => {
       setImage(null)
     }
   };
+
+
 
   return (
     <WidgetWrapper  sx={{
@@ -186,5 +193,7 @@ const MyPostWidget = ({ picturePath }) => {
     </WidgetWrapper>
   );
 };
+
+
 
 export default MyPostWidget;

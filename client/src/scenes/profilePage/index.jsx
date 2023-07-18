@@ -7,7 +7,6 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 import axios from "../../utils/axios";
-import backgroundImage from "./prfbg.jpg";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -27,7 +26,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getUser();
-  }, []); 
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) return null;
 

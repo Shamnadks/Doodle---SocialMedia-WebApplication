@@ -5,8 +5,6 @@ import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import toast, { Toaster } from 'react-hot-toast';
-import axios from '../../utils/axios';
-import {getUsers} from '../../utils/constants';
 import { blockUnblockUser , getUsersLists} from '../../services/adminServices';
 
 

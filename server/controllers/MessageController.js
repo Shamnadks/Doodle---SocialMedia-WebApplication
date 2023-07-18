@@ -1,7 +1,6 @@
 
 import ConversationModel from '../models/conversationModel.js'
 import MessageModel from '../models/messageModel.js'
-import jwt from 'jsonwebtoken'
 
 
 export const newConversation = async (req, res) => {
@@ -19,7 +18,7 @@ export const newConversation = async (req, res) => {
 
 export const getUnreadCount = async (req, res) => {
     try {
-        const currentUserId = req.user
+        const currentUserId = req.user.id;
         const count = await MessageModel.countDocuments({
             conversationId: req.params.conversationId,
             read: false,
@@ -36,23 +35,18 @@ export const getUnreadCount = async (req, res) => {
 export const addMessage = async (req, res) => {
     const newMessage = new MessageModel(req.body);
     const conversationId = req.body.conversationId;
-  
     try {
       const savedMessage = await newMessage.save();
       const conversation = await ConversationModel.findById(conversationId);
-  
       conversation.lastMsg += 1;
-      if (savedMessage.receiverId !== req.user.id) {
-        conversation.unreadCount += 1;
-      }
       await conversation.save();
-  
       res.status(200).json(savedMessage);
     } catch (err) {
       res.status(500).json(err);
     }
   }
   
+
 
 
 export const getMessage = async (req, res) => {

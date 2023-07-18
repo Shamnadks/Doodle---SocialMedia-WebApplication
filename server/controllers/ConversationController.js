@@ -1,5 +1,4 @@
 import ConversationModel from "../models/conversationModel.js";
-import MessageModel from "../models/messageModel.js";
 
 
 export const newConversation = async (req, res) => {
@@ -43,16 +42,3 @@ export const getConvIncTwo = async (req, res) => {
 }
 
 
-// export const getUnreadCount = async (req, res) => {
-//   try {
-//     const count = await MessageModel.countDocuments({
-//       conversationId: req.params.conversationId,
-//       read: false,
-//       receiver: req.user._id
-//     });
-//     res.status(200).json({ unreadCount: count });
-//   } catch (err) {
-//     res.status(500).json(err);
-//     console.log(err);
-//   }
-// }

@@ -1,4 +1,3 @@
-
 import {
   Box,
   Button,
@@ -11,7 +10,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAdminLogin } from "state";
-import toast,{Toaster} from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import axios from "../../utils/axios";
 import { adminLogin } from "../../utils/constants";
 
@@ -29,8 +28,9 @@ const initialValuesLogin = {
   password: "",
 };
 
+
+
 const LoginAdmin = () => {
- 
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,20 +54,20 @@ const LoginAdmin = () => {
           })
         );
         navigate("/adminHome");
-      } else if (response.status === 400) {
-        toast.error(loggedIn.msg);
-      } else if (response.status === 404) {
-        toast.error(loggedIn.msg);
-      }
+      } 
     } catch (error) {
-      console.log("Error logging in:", error);
+      toast.error(error.response.data.msg);
     }
   };
+
+
 
   const handleFormSubmit = async (values, onSubmitProps) => {
      await login(values, onSubmitProps);
   };
 
+
+  
   return (
     <Formik
       onSubmit={handleFormSubmit}
@@ -131,7 +131,6 @@ const LoginAdmin = () => {
             >
               LOGIN
             </Button>
-            <Toaster />
           </Box>
         </form>
       )}

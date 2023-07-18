@@ -18,7 +18,7 @@ import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import toast from 'react-hot-toast';
 import axios from '../../utils/axios';
-import { registerUser , loginUser } from "../../utils/constants";
+import { registerUser , loginUser} from "../../utils/constants";
 
 
 const registerSchema = yup.object().shape({
@@ -73,10 +73,10 @@ const Form = () => {
   function handleCallbackResponse(response) {
     console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
-    console.log("hdfuiuytff", userObject);
-
     setUser(userObject);
   }
+
+
 
   useEffect(() => {
     const initializeGoogleSignIn = () => {
@@ -108,11 +108,13 @@ const Form = () => {
       }
     };
 
+
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.onload = initializeGoogleSignIn;
     document.body.appendChild(script);
+
 
     return () => {
       document.body.removeChild(script);
@@ -129,11 +131,14 @@ const Form = () => {
       location: "India",
       occupation: "Not Specified",
     };
-    const response = await fetch("http://localhost:3001/auth/google", {
+    const response =   await fetch("http://localhost:3001/auth/google", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(googledata),
-      })
+      headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify(googledata),
+      });
+      
 
       const data = await response.json();
     if (response.status === 200) {
@@ -171,7 +176,6 @@ const Form = () => {
           error: "Failed to send OTP.",
         }
       );
-  
       navigate("/otp", { state: { email: response.data.email } });
       onSubmitProps.resetForm();
     } catch (error) {
@@ -179,6 +183,7 @@ const Form = () => {
       toast.error(error.response.data.msg);
     }
   };
+
 
 
   const login = async (values, onSubmitProps) => {

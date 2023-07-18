@@ -216,6 +216,7 @@ export const rejectReport = async (req, res) => {
 }
 
 
+
 export const resolveReport = async (req, res) => {
   try {
       var isPostFound = true

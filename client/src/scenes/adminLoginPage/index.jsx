@@ -1,7 +1,5 @@
-
 import { Box ,Typography,useTheme, useMediaQuery } from "@mui/material";
 import FormAdmin from "./FormAdmin";
-import backgroundImage from "./background.jpg";
 
 
 
@@ -11,7 +9,7 @@ const AdminLoginPage =()=>{
     const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
 
     return (<Box  sx={{
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(https://res.cloudinary.com/dwpsyo2te/image/upload/v1689663362/SOCIAL-MEDIA/nxxq8qimsfajz5awrx5h.jpg)`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",

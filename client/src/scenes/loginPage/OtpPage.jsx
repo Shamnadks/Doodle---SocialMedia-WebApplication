@@ -62,7 +62,7 @@ const OtpPage = () => {
     }
     }
     catch (error) {
-      console.log(error);
+      toast.error("Entered OTP is wrong");
     }
   };
 

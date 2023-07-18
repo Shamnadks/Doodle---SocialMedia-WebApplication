@@ -31,14 +31,13 @@ const neutralLight = theme.palette.neutral.light;
 const dark= theme.palette.neutral.dark;
 const background = theme.palette.background.default;
 const primaryLight = theme.palette.primary.light;
-const alt = theme.palette.background.alt;
+
 
 const fullName = `${user.firstName} ${user.lastName}`;
 
 
 
 const fetchSearchResults = async (value) => {
-    console.log("seaaarchingggggg");
     if (value.length > 0) {
       try {
         const response = await fetch(`http://localhost:3001/users/search/${value}`);
@@ -61,7 +60,6 @@ const handleChange =(value)=>{
 }
 
     return (<FlexBetween padding="1rem 6%" 
-    // backgroundColor={alt}
     width="100%"  sx={{
         backgroundColor:"transparent",
         backdropFilter: "blur(20px)",

@@ -121,13 +121,12 @@ const UserWidget = ({ userId, picturePath, isHome }) => {
       }
     } else {
       try {
-        const response = await axios.patch("/users/editProfile", {
+        await axios.patch("/users/editProfile", {
           userId,
           firstName: updatedFirstName,
           lastName: updatedLastName,
           occupation: updatedOccupation,
         });
-
         setUser((prevState) => ({
           ...prevState,
           firstName: updatedFirstName,

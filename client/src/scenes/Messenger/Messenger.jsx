@@ -13,16 +13,7 @@ import InputEmoji from 'react-input-emoji'
 import {SocketContext} from '../../Context/socketContext';
 import { useSelector } from "react-redux";
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-}
+
 
 export default function Messenger() {
   const navigate = useNavigate();
@@ -46,7 +37,7 @@ export default function Messenger() {
 
   useEffect(() => {
     socket.emit("addUser", { userId: currentUser._id })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   useEffect(() => {
@@ -57,7 +48,7 @@ export default function Messenger() {
         createdAt: Date.now(),
       });
     });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     arrivalMessage &&
@@ -70,22 +61,14 @@ export default function Messenger() {
     if (arrivalMessage) {
       if (!currentChat?.members.includes(arrivalMessage.sender)) {
         axios.get("/users/" + arrivalMessage.sender).then((res) => {
-          toast(`you have a message from ${res.data.firstName}`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          toast(`you have a message from ${res.data.firstName}`)
         })
 
       }
     }
+  }, [arrivalMessage]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  }, [arrivalMessage]);
+
 
   useEffect(() => {
     const friendId = currentChat?.members.find((m) => m !== currentUser._id);
@@ -103,18 +86,7 @@ export default function Messenger() {
     };
   }, [currentUser, currentChat]);
 
-  // useEffect(() => {
-  //   const getConversations = async () => {
-  //     try {
-  //       const res = await axios.get("/conversations/" + currentUser._id);
-  //       const sortedConversations = res.data.length > 2 ? res.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : res.data;
-  //       setConversations(sortedConversations);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getConversations();
-  // }, [currentUser._id]);
+  
 
 
   useEffect(() => {
@@ -168,9 +140,7 @@ export default function Messenger() {
         (c) => c._id !== currentChat._id
       );
       setConversations([currentChat, ...filteredConversations]);
-      setNewMessage("");
-
-
+      setNewMessage("")
       try {
         let sendNot = false;
         setNotCount(notCount + 1);
@@ -265,7 +235,7 @@ export default function Messenger() {
                       /></div></>
                   )}
                   <input
-                    value={reciever ? reciever.firstName +" "+ reciever.lastName : "chat"}
+                    value={reciever ? reciever.firstName +" "+ reciever.lastName : "Doodle chat"}
                     className="receiver chatMenuInput"
                     disabled
                   />
