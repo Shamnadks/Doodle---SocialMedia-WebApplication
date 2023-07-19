@@ -48,8 +48,8 @@ export const register = async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.emailUser,
-          pass: process.env.emailPassword
+          user: process.env.EMAILUSER,
+          pass: process.env.EMAILPASSWORD
         }
       });
   
