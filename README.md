@@ -21,12 +21,25 @@ Actively contributed to the project's architecture, design, and feature planning
 
 Key Features:
 
-Chat: Real-time instant messaging functionality, allowing users to exchange messages with their contacts.
-Video Call: One-on-one video calling feature powered by Twilio API for seamless face-to-face communication.
-Audio Call: Voice-only calling functionality, enabling users to have audio conversations with their contacts.
-Group Chat: Create and join group chats to communicate with multiple participants simultaneously.
-User Authentication: Secure user registration, login, and profile management functionalities.
-Responsive UI: A responsive and intuitive user interface built with React and Material-UI.
+🌐 Connect, Collaborate, and Create with Doodle - our cutting-edge social media web application built with ReactJS, NodeJS, MongoDB, and ExpressJS. 📈
+
+💬 Experience Real-time Chatting: Stay connected with friends and followers in the moment with our seamless real-time chat feature.
+
+👍 Engage with Posts: Like, comment, and share your thoughts on posts from your network, fostering meaningful interactions.
+
+✍️ Share Your Moments: Unleash your creativity and share your life's highlights with our easy-to-use post creation feature.
+
+👥 Grow Your Network: Explore a vast community of like-minded individuals, build a loyal following, and connect with new friends.
+
+🔧 Customize Your Profile: Make it uniquely yours with profile editing options, showcasing your personality and interests.
+
+🌓 Light and Dark Mode: Personalize your browsing experience with a choice between light and dark mode, ensuring maximum comfort.
+
+⚠️ Safe and Secure: Rest assured that your privacy is our top priority, with robust post reporting and moderation features.
+
+Join the Doodle community and revolutionize your social media experience today! 🎉 #SocialMedia #ReactJS #NodeJS #MongoDB #ExpressJS #Doodle #Innovation #TechRevolution"
+
+
 Tech Stack:
 
 Front-end: JavaScript, React, Redux, Material-UI
